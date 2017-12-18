@@ -71,7 +71,7 @@ void SmartGhost::CambiaDir()
 		vector<int> posibl;
 		for (int i = 0; i < 4; i++)
 		{
-			if (gueim->NextCell(PosX, PosY, i))
+			if (gueim->NextCell(PosX, PosY, i) && i != (dir + 2) % 4)
 			{
 				contad++;
 				posibl.push_back(i);
