@@ -34,6 +34,9 @@ private:
 	//array de punteros a fantasmas
 	Ghost* ghosts[4];
 
+	vector<SmartGhost*> enemies;
+
+
 	//vector de punteros a texturas
 	vector<Texture*>texturas;
 
@@ -99,5 +102,8 @@ public:
 	void MenuEvents();
 	int PacManX();
 	int PacManY();
+	int getFils();
+	int getCols();
+	void creaFantasma(int posX, int posY);
 };
 

@@ -62,7 +62,7 @@ void SmartGhost::CambiaDir()
 			dir = (dir + 2) % 4;
 		}
 	}
-	else
+	else if(edad < 60)
 	{
 		int contad = 0;
 		int j = 0;
@@ -96,6 +96,12 @@ void SmartGhost::CambiaDir()
 			j++;
 		}
 	}
+	else
+	{
+		dir = -1;
+		anim = -1;
+		muerto = true;
+	}
 }
 //Comprueba las 4 posibles direcciones del Fantasma, descarta las inválidas y elige una de las posibles al azar
 
@@ -107,7 +113,6 @@ int SmartGhost::GetAnim()
 
 void SmartGhost::Mueve(int fils, int cols)
 {
-	cout << "alog";
 	CambiaDir();
 	if (dir == 0)
 	{
@@ -141,7 +146,7 @@ void SmartGhost::SetInicio() {
 }
 //Devuelve al fantasma a su posicion inicial
 
-void SmartGhost::RenderGhost(SDL_Rect rekt, int d, PacMan* pacman)
+void SmartGhost::RenderGhost(SDL_Rect rekt, PacMan* pacman)
 {
 	
 	if (edad <= 20)
@@ -158,9 +163,9 @@ void SmartGhost::RenderGhost(SDL_Rect rekt, int d, PacMan* pacman)
 	else
 	{
 		if (GetAnim() == 0)
-			text->RenderFrame(d * 2, 0, rekt, render);
+			text->RenderFrame(8, 0, rekt, render);
 		else
-			text->RenderFrame(d * 2 + 1, 0, rekt, render);
+			text->RenderFrame(9, 0, rekt, render);
 	}
 	SumaEdad();
 }
@@ -170,8 +175,11 @@ void SmartGhost::Render() {
 
 }
 
-void SmartGhost::update() {
-
+void SmartGhost::update() 
+{
+	//Mueve(gueim->getFils, gueim->getCols);
+	SumaEdad();
+	Render();
 }
 
 bool SmartGhost::loadFromFile(string file) {
@@ -185,4 +193,20 @@ bool SmartGhost::saveToFile(string file) {
 void SmartGhost::SumaEdad()
 {
 	edad += 0.5f;
+}
+bool SmartGhost::esAdulto()
+{
+	return (edad > 15);
+}
+bool SmartGhost::esPadre()
+{
+	return padre;
+}
+void SmartGhost::CambiaPapa()
+{
+	padre = true;
+}
+bool SmartGhost::estaMuerto()
+{
+	return muerto;
 }
