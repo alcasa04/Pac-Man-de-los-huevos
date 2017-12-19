@@ -21,8 +21,13 @@ Game::Game()
 
 
 	else {
+		string level;
 	//aqui va el codigo que queremos ejecutar
-		SetMap("Level01.dat");
+		if (Nivel < 10) {
+			level = "Level0" + to_string(Nivel) + ".dat";
+			SetMap(level);
+		}
+		else level = "Level" + to_string(Nivel) + ".dat";
 		LoadTextures();
 
 	}
@@ -280,12 +285,12 @@ void Game::run()
 	while (!finJuego() && !exit) {
 		if (!pausa)
 		{
-			SDL_Delay(100);
-			handleEvents();
-			Update();
-			Renderizado();
-			pacman->Mueve(Fils, Cols);
-			Colision();
+		SDL_Delay(75);
+		handleEvents();
+		Update();
+		Renderizado();
+		pacman->Mueve(Fils,Cols);
+		Colision();
 			for (int i = 0; i < 4; i++)
 			{
 				ghosts[i]->Mueve(Fils, Cols);
@@ -400,6 +405,74 @@ int Game::PacManX()
 int Game::PacManY()
 {
 	return(pacman->getPosY());
+}
+
+bool Game::SaveToFile() {
+	//lectura en pantalla y pausa del juego
+	string entrada;
+	cin >> entrada;
+	//if (entrada == " ")//de momento solo un espacio
+	//{
+		ofstream archivo;
+		archivo.open("Save.txt");
+		archivo << entrada << endl;
+		archivo << puntos << endl;
+		if (!map->saveToFile(archivo))error = true;
+		if (!pacman->saveToFile(archivo))error = true;
+
+		for (int i = 0; i < 4; i ++ ) {
+			if (!ghosts[i]->saveToFile(archivo))error = true;
+		}
+
+		archivo << enemies.size();
+		for (int i = 0; i < enemies.size(); i++) {
+			if (!enemies[i]->saveToFile(archivo))error = true;
+		}
+		/*
+		for (int i = 0; i < lista.size(); i++)
+			if (!lista[i]->saveToFile(archivo))error = true;
+			*/
+		//iterator* i = new iterator();
+		//quedan los fantasmas
+
+		archivo.close();
+		return archivo.fail();
+	//}
+}
+
+bool Game::LoadFromFile() {
+	string entrada, code;
+	ifstream archivo;
+	cin >> entrada;
+	archivo.open("Save.txt");
+	archivo >> code;
+	if (entrada == code) {
+		map = new GameMap(0, 0, render);
+		if (!map->loadFromFile(archivo))error = true;
+
+		pacman = new PacMan(0, 0, render, this);
+		if (!pacman->loadFromFile(archivo))error = true;
+
+		for (int i = 0; i < 4; i++) {
+			ghosts[i] = new Ghost(0, 0, render, this);
+			if (!ghosts[i]->loadFromFile(archivo))error = true;
+		}
+
+		int numEnemies = 0;
+		archivo >> numEnemies;
+		for (int i = 0; i < numEnemies; i++) {
+			enemies.push_back(new SmartGhost(0, 0, render, this));
+			if (!enemies[i]->loadFromFile(archivo))error = true;
+		}
+		/*int aux = 0;
+		archivo >> aux;
+		for (int i = 0; i < aux; i++) {
+			lista.push_back(new GameCharacter(0, 0, this));
+
+		}*/
+	}
+	archivo.close();
+	return !archivo.fail();
 }
 int Game::getFils()
 {

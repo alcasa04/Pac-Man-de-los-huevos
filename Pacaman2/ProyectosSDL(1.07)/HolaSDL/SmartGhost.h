@@ -7,11 +7,6 @@ class SmartGhost : public GameCharacter
 {
 private:
 
-	//PacMan* pacman = nullptr;
-
-	//Texture* textGhost = new Texture();
-
-
 	//posiciones actuales e iniciales del fantasma
 
 	int anim = 0;
@@ -52,10 +47,10 @@ public:
 	void CambiaDir();
 	void SetInicio();
 
-	void Render();
-	void update();
-	bool loadFromFile(string filename);
-	bool saveToFile(string filename);
+	virtual void Render();
+	virtual void update();
+	virtual bool loadFromFile(ifstream& archivo);
+	virtual bool saveToFile(ofstream& archivo);
 
 	void SumaEdad();
 	bool esAdulto();

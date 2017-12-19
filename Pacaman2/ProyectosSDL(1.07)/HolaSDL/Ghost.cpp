@@ -126,10 +126,16 @@ void Ghost::update() {
 
 }
 
-bool Ghost::loadFromFile(string file) {
-	return true;
+bool Ghost::loadFromFile(ifstream& archivo) {
+	archivo >> IniX >> IniY;
+	archivo >> PosX >> PosY;
+
+	return !archivo.fail();
 }
 
-bool Ghost::saveToFile(string file) {
-	return true;
+bool Ghost::saveToFile(ofstream& archivo) {
+	archivo << IniX << " " << IniY << endl;
+	archivo << PosX << " " << IniX << endl;
+
+	return !archivo.fail();
 }

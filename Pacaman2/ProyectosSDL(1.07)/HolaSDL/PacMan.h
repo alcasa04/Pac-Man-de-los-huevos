@@ -66,9 +66,9 @@ public:
 	void Contador();
 	//metodos auxiliares
 
-	void Render();
-	void Update();
-	bool loadFromFile(string filename);
-	bool saveToFile(string filename);
+	virtual void Render();
+	virtual void Update();
+	virtual bool loadFromFile(ifstream& archivo);
+	virtual bool saveToFile(ofstream& archivo);
 };
 

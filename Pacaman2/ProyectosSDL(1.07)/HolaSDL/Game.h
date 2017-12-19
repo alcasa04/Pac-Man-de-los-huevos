@@ -5,6 +5,7 @@
 #include<fstream>
 #include "Texture.h"
 #include<vector>
+#include<list>
 
 class GameCharacter;
 class PacMan;
@@ -28,6 +29,8 @@ private:
 	
 	//puntero a pacman
 	PacMan* pacman = nullptr;
+
+	list<GameCharacter*> lista;
 
 	//array de punteros a fantasmas
 	Ghost* ghosts[4];
@@ -70,6 +73,7 @@ private:
 
 	int puntos = 0;
 	int maxPunt = 0;
+	int Nivel =4 ;
 
 	//numero de imagenes o texturas que se van a cargar
 	const int numText = 4;
@@ -106,6 +110,10 @@ public:
 	void MenuEvents();
 	int PacManX();
 	int PacManY();
+
+	bool SaveToFile();
+	bool LoadFromFile();
+
 	int getFils();
 	int getCols();
 	void creaFantasma(int posX, int posY);
