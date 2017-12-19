@@ -1,25 +1,10 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (pacman.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
-  SmartGhost.cpp
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(80): warning C4018: '<': no coinciden signed/unsigned
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(88): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(89): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(69): warning C4101: 'auxMax': variable local sin referencia
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(149): warning C4244: '+=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(150): warning C4244: '+=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(151): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(152): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-  Ghost.cpp
-  GameMap.cpp
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\gamemap.cpp(90): error C2106: '=': el operando izquierdo debe ser valor L
   Game.cpp
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(367): error C2280: 'std::basic_ofstream<char,std::char_traits<char>>::basic_ofstream(const std::basic_ofstream<char,std::char_traits<char>> &)': se está intentando hacer referencia a una función eliminada.
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.11.25503\include\fstream(1065): note: vea la declaración de 'std::basic_ofstream<char,std::char_traits<char>>::basic_ofstream'
-  c:\program files (x86)\microsoft visual studio\2017\community\vc\tools\msvc\14.11.25503\include\fstream(1065): note: 'std::basic_ofstream<char,std::char_traits<char>>::basic_ofstream(const std::basic_ofstream<char,std::char_traits<char>> &)': la función se eliminó explícitamente
-  Generando código...
-  Compilando...
-  PacMan.cpp
-  Generando código...
-  Omitiendo... (no se detectaron cambios relevantes)
-  main.cpp
-  GameObject.cpp
-  GameCharacter.cpp
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(139): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(194): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(204): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(286): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(409): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(471): warning C4101: 'dir': variable local sin referencia
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\game.cpp(349): warning C4715: 'Game::NextCell': no todas las rutas de acceso de control devuelven un valor
+  HolaSDL.vcxproj -> C:\Users\hecto\UNIVERSIDAD\2º\TPV\PacamanDef\Pac-Man-de-los-huevos\Pacaman2\ProyectosSDL(1.07)\bin\HolaSDLDebug.exe

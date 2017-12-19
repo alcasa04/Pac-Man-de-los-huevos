@@ -37,6 +37,9 @@ private:
 	//array de punteros a fantasmas
 	Ghost* ghosts[4];
 
+	vector<SmartGhost*> enemies;
+
+
 	//vector de punteros a texturas
 	vector<Texture*>texturas;
 
@@ -105,5 +108,9 @@ public:
 
 	bool SaveToFile();
 	bool LoadFromFile();
+
+	int getFils();
+	int getCols();
+	void creaFantasma(int posX, int posY);
 };
 

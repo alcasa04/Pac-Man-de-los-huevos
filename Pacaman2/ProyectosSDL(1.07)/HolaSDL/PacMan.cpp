@@ -205,7 +205,7 @@ void PacMan::RenderPac(SDL_Rect recta)
 
 void PacMan::Update() {  }
 void PacMan::Render() {}
-bool PacMan::saveToFile(ofstream archivo)
+bool PacMan::saveToFile(ofstream& archivo)
 {
 	archivo << IniX << " " << IniY << endl;
 	archivo << PosX << " " << PosX << endl;
@@ -213,7 +213,7 @@ bool PacMan::saveToFile(ofstream archivo)
 
 	return !archivo.fail();
 }
-bool PacMan::loadFromFile(ifstream archivo)
+bool PacMan::loadFromFile(ifstream& archivo)
 {
 	archivo >> IniX >> IniY;
 	archivo >> PosX >> PosY;

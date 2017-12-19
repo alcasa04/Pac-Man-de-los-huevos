@@ -11,6 +11,8 @@ private:
 
 	int anim = 0;
 	float edad = 5;
+	bool padre = false;
+	bool muerto = false;
 
 	//Game* game = nullptr;
 
@@ -35,7 +37,7 @@ public:
 	~SmartGhost();
 	//destructora
 
-	void RenderGhost(SDL_Rect rekt, int d, PacMan* pacman);
+	void RenderGhost(SDL_Rect rekt, PacMan* pacman);
 
 	int getPosX();
 	int getPosY();
@@ -47,9 +49,13 @@ public:
 
 	virtual void Render();
 	virtual void update();
-	virtual bool loadFromFile(ifstream archivo);
-	virtual bool saveToFile(ofstream archivo);
+	virtual bool loadFromFile(ifstream& archivo);
+	virtual bool saveToFile(ofstream& archivo);
 
 	void SumaEdad();
+	bool esAdulto();
+	bool esPadre();
+	void CambiaPapa();
+	bool estaMuerto();
 };
 

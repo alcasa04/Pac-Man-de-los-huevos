@@ -70,7 +70,8 @@ bool Game::SetMap(string filename) {
 			}
 		}
 	}
-	smart = new SmartGhost(1, 1, render, this);
+	enemies.push_back(new SmartGhost(1, 1, render, this));
+	enemies.push_back(new SmartGhost(1, 3, render, this));
 	archivo.close();
 	return !archivo.fail();
 }
@@ -132,10 +133,13 @@ void Game::Renderizado(){
 			//Renderizado de fantasmas
 
 			if (pacman->getPosX() == j && pacman->getPosY() == i)
-			{
+			{ 
 				pacman->RenderPac(destRec);
 			}
-			if (smart->getPosX() == j && smart->getPosY() == i) smart->RenderGhost(destRec,1, pacman);
+			for (int a = 0; a < enemies.size(); a++)
+			{
+				if (enemies[a]->getPosX() == j && enemies[a]->getPosY() == i) enemies[a]->RenderGhost(destRec, pacman);
+			}
 			//Renderizado de PacMan
 		}
 	}
@@ -184,6 +188,29 @@ void Game::Colision()
 		else if (pacman->getPosX() == ghosts[i]->getPosX() && pacman->getPosY() == ghosts[i]->getPosY() && pacman->Come == true)
 		{
 			ghosts[i]->SetInicio();
+		}
+
+	}
+	for(int i = 0; i < enemies.size(); i++)
+    {
+		if (pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && pacman->Come == false)
+		{
+			exit = true;
+		}
+		else if(pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && (pacman->Come == true || enemies[i]->estaMuerto()))
+		{
+			enemies[i]->SetInicio();
+		}
+		for (int j = 0; j < enemies.size(); j++)
+		{
+			if (i != j && enemies[i]->getPosX() == enemies[j]->getPosX() && enemies[i]->getPosY() == enemies[j]->getPosY() &&
+				enemies[i]->esAdulto() && enemies[j]->esAdulto() && enemies[i]->esPadre() == false && enemies[j]->esPadre() == false)
+			{
+				cout << "añgo";
+				creaFantasma(enemies[i]->getPosX(), enemies[i]->getPosY());
+				enemies[i]->CambiaPapa();
+				enemies[j]->CambiaPapa();
+			}
 		}
 	}
 }
@@ -245,16 +272,20 @@ void Game::run()
 		else(SDL_Delay(400));
 	}
 	while (!finJuego() && !exit) {
-		SDL_Delay(100);
+		SDL_Delay(75);
 		handleEvents();
 		Update();
 		Renderizado();
 		pacman->Mueve(Fils,Cols);
-		smart->Mueve(Fils, Cols);
+		//smart->Mueve(Fils, Cols);
 		Colision();
 		for (int i = 0; i < 4; i++)
 		{
 			ghosts[i]->Mueve(Fils, Cols);
+		}
+		for (int i = 0; i < enemies.size(); i++)
+		{
+			enemies[i]->Mueve(Fils, Cols);
 		}
 		Colision();
 		map->AnimVit();
@@ -333,6 +364,7 @@ void Game::Menu()
 //Pulsación de Espacio en el menu
 void Game::MenuEvents()
 {
+
 	while (SDL_PollEvent(&evento))
 	{
 		if (evento.type == SDL_QUIT)
@@ -360,12 +392,23 @@ bool Game::SaveToFile() {
 	//lectura en pantalla y pausa del juego
 	string entrada;
 	cin >> entrada;
-	if (entrada == " ")//de momento solo un espacio
-	{
+	//if (entrada == " ")//de momento solo un espacio
+	//{
 		ofstream archivo;
 		archivo.open("Save.txt");
+		archivo << entrada << endl;
+		archivo << puntos << endl;
 		if (!map->saveToFile(archivo))error = true;
 		if (!pacman->saveToFile(archivo))error = true;
+
+		for (int i = 0; i < 4; i ++ ) {
+			if (!ghosts[i]->saveToFile(archivo))error = true;
+		}
+
+		archivo << enemies.size();
+		for (int i = 0; i < enemies.size(); i++) {
+			if (!enemies[i]->saveToFile(archivo))error = true;
+		}
 		/*
 		for (int i = 0; i < lista.size(); i++)
 			if (!lista[i]->saveToFile(archivo))error = true;
@@ -375,22 +418,33 @@ bool Game::SaveToFile() {
 
 		archivo.close();
 		return archivo.fail();
-	}
+	//}
 }
 
 bool Game::LoadFromFile() {
-	string entrada, nivel;
+	string entrada, code;
 	ifstream archivo;
-	archivo.open("Save.txt");
-	archivo >> nivel;
 	cin >> entrada;
-	if (entrada == nivel) {
+	archivo.open("Save.txt");
+	archivo >> code;
+	if (entrada == code) {
 		map = new GameMap(0, 0, render);
 		if (!map->loadFromFile(archivo))error = true;
 
 		pacman = new PacMan(0, 0, render, this);
 		if (!pacman->loadFromFile(archivo))error = true;
 
+		for (int i = 0; i < 4; i++) {
+			ghosts[i] = new Ghost(0, 0, render, this);
+			if (!ghosts[i]->loadFromFile(archivo))error = true;
+		}
+
+		int numEnemies = 0;
+		archivo >> numEnemies;
+		for (int i = 0; i < numEnemies; i++) {
+			enemies.push_back(new SmartGhost(0, 0, render, this));
+			if (!enemies[i]->loadFromFile(archivo))error = true;
+		}
 		/*int aux = 0;
 		archivo >> aux;
 		for (int i = 0; i < aux; i++) {
@@ -399,4 +453,37 @@ bool Game::LoadFromFile() {
 		}*/
 	}
 	archivo.close();
+	return !archivo.fail();
+}
+int Game::getFils()
+{
+	return Fils;
+}
+int Game::getCols()
+{
+	return Cols;
+}
+void Game::creaFantasma(int posX, int posY)
+{
+
+	int contador = 0;
+	vector<int>posibles;
+	int dir;
+	for (int i = 0; i < 4; i++)
+	{
+		if (NextCell(posX, posY, i))
+		{
+			contador++;
+			posibles.push_back(i);
+		}
+	}
+	if (contador > 0)
+	{
+		int random = rand() % contador;
+		if (posibles[random] == 0) posY++;
+		else if (posibles[random] == 1)posX++;
+		else if (posibles[random] == 2)posY--;
+		else if (posibles[random] == 3)posX--;
+		enemies.push_back(new SmartGhost(posX, posY, render, this));
+	}
 }

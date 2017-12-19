@@ -68,7 +68,7 @@ public:
 
 	virtual void Render();
 	virtual void Update();
-	virtual bool loadFromFile(ifstream archivo);
-	virtual bool saveToFile(ofstream archivo);
+	virtual bool loadFromFile(ifstream& archivo);
+	virtual bool saveToFile(ofstream& archivo);
 };
 
