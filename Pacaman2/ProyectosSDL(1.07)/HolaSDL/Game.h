@@ -69,6 +69,7 @@ private:
 
 	int puntos = 0;
 	int maxPunt = 0;
+	int Nivel =4 ;
 
 	//numero de imagenes o texturas que se van a cargar
 	const int numText = 4;

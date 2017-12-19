@@ -21,8 +21,13 @@ Game::Game()
 
 
 	else {
+		string level;
 	//aqui va el codigo que queremos ejecutar
-		SetMap("Level01.dat");
+		if (Nivel < 10) {
+			level = "Level0" + to_string(Nivel) + ".dat";
+			SetMap(level);
+		}
+		else level = "Level" + to_string(Nivel) + ".dat";
 		LoadTextures();
 
 	}
