@@ -61,9 +61,9 @@ public:
 
 	void AnimVit();
 
-	bool loadFromFile(string filename);
+	bool loadFromFile(ifstream archivp);
 	void Render();
 	void update();
-	bool saveToFile(string filename);
+	bool saveToFile(ofstream archivo);
 };
 

@@ -174,12 +174,16 @@ void SmartGhost::update() {
 
 }
 
-bool SmartGhost::loadFromFile(string file) {
+bool SmartGhost::loadFromFile(ifstream archivo) {
 	return true;
 }
 
-bool SmartGhost::saveToFile(string file) {
-	return true;
+bool SmartGhost::saveToFile(ofstream archivo) {
+	archivo << IniX << " " << IniY << endl;
+	archivo << PosX << " " << PosY << endl;
+	archivo << edad << endl;
+
+	return !archivo.fail();
 }
 
 void SmartGhost::SumaEdad()

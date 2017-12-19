@@ -68,7 +68,7 @@ public:
 
 	void Render();
 	void Update();
-	bool loadFromFile(string filename);
-	bool saveToFile(string filename);
+	bool loadFromFile(ifstream archivo);
+	bool saveToFile(ofstream archivo);
 };
 

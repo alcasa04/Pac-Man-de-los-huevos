@@ -34,7 +34,7 @@ GameCharacter::~GameCharacter()
 {
 }
 
-bool GameCharacter::loadFromFile(string filename) { return true; }
+bool GameCharacter::loadFromFile(ifstream archivo) { return true; }
 void GameCharacter::Render(){}
 void GameCharacter::update(){}
-bool GameCharacter::saveToFile(string filename) { return true; }
+bool GameCharacter::saveToFile(ofstream archivo) { return true; }

@@ -205,5 +205,12 @@ void PacMan::RenderPac(SDL_Rect recta)
 
 void PacMan::Update() {  }
 void PacMan::Render() {}
-bool PacMan::saveToFile(string filename) { return true; }
-bool PacMan::loadFromFile(string filename) { return true; }
+bool PacMan::saveToFile(ofstream archivo)
+{
+	archivo << IniX << " " << IniY << endl;
+	archivo << PosX << " " << PosX << endl;
+	archivo << contador << endl;
+}
+bool PacMan::loadFromFile(ifstream archivo)
+{
+}

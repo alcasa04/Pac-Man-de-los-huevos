@@ -355,3 +355,24 @@ int Game::PacManY()
 {
 	return(pacman->getPosY());
 }
+
+bool Game::SaveToFile() {
+	//lectura en pantalla y pausa del juego
+	string entrada;
+	cin >> entrada;
+	if (entrada == " ")//de momento solo un espacio
+	{
+		ofstream archivo;
+		archivo.open("Save.txt");
+		if (!map->saveToFile(archivo))error = true;
+		if (!pacman->saveToFile(archivo))error = true;
+		/*
+		for (int i = 0; i < lista.size(); i++)
+			if (!lista[i]->saveToFile(archivo))error = true;
+			*/
+		//iterator* i = new iterator();
+
+		archivo.close();
+		return archivo.fail();
+	}
+}

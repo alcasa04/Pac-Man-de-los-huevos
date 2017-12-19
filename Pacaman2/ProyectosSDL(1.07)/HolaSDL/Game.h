@@ -5,6 +5,7 @@
 #include<fstream>
 #include "Texture.h"
 #include<vector>
+#include<list>
 
 class GameCharacter;
 class PacMan;
@@ -30,6 +31,8 @@ private:
 	
 	//puntero a pacman
 	PacMan* pacman = nullptr;
+
+	list<GameCharacter*> lista;
 
 	//array de punteros a fantasmas
 	Ghost* ghosts[4];
@@ -99,5 +102,7 @@ public:
 	void MenuEvents();
 	int PacManX();
 	int PacManY();
+
+	bool SaveToFile();
 };
 
