@@ -154,7 +154,6 @@ void Game::Update()
 	{
 		map->SetCell(pacman->getPosX(), pacman->getPosY(), Vacio);
 		puntos++;
-		//cout << puntos <<endl;
 	}
 	else if (map->tablero[pacman->getPosY()][pacman->getPosX()] == Vitamina)
 	{
@@ -193,12 +192,13 @@ void Game::Colision()
 	}
 	for(int i = 0; i < enemies.size(); i++)
     {
-		if (pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && pacman->Come == false)
+		if (pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && pacman->Come == false && !enemies[i]->estaMuerto())
 		{
 			exit = true;
 		}
 		else if(pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && (pacman->Come == true || enemies[i]->estaMuerto()))
 		{
+			if(!enemies[i]->estaMuerto())
 			enemies[i]->SetInicio();
 		}
 		for (int j = 0; j < enemies.size(); j++)
@@ -206,7 +206,7 @@ void Game::Colision()
 			if (i != j && enemies[i]->getPosX() == enemies[j]->getPosX() && enemies[i]->getPosY() == enemies[j]->getPosY() &&
 				enemies[i]->esAdulto() && enemies[j]->esAdulto() && enemies[i]->esPadre() == false && enemies[j]->esPadre() == false)
 			{
-				cout << "añgo";
+				
 				creaFantasma(enemies[i]->getPosX(), enemies[i]->getPosY());
 				enemies[i]->CambiaPapa();
 				enemies[j]->CambiaPapa();
@@ -256,6 +256,12 @@ void Game::handleEvents() {
 			{
 				pacman->CambiaDir(0);
 			}
+			else if (evento.key.keysym.sym == SDLK_s)
+			{
+				if (!pausa)pausa = true;
+				else pausa = false;
+
+			}
 		}
 	}
 }
@@ -272,25 +278,32 @@ void Game::run()
 		else(SDL_Delay(400));
 	}
 	while (!finJuego() && !exit) {
-		SDL_Delay(100);
-		handleEvents();
-		Update();
-		Renderizado();
-		pacman->Mueve(Fils,Cols);
-		//smart->Mueve(Fils, Cols);
-		Colision();
-		for (int i = 0; i < 4; i++)
+		if (!pausa)
 		{
-			ghosts[i]->Mueve(Fils, Cols);
+			SDL_Delay(100);
+			handleEvents();
+			Update();
+			Renderizado();
+			pacman->Mueve(Fils, Cols);
+			Colision();
+			for (int i = 0; i < 4; i++)
+			{
+				ghosts[i]->Mueve(Fils, Cols);
+			}
+			for (int i = 0; i < enemies.size(); i++)
+			{
+				enemies[i]->Mueve(Fils, Cols);
+			}
+			Colision();
+			map->AnimVit();
+			pacman->Contador();
+			GUI();
 		}
-		for (int i = 0; i < enemies.size(); i++)
+		else
 		{
-			enemies[i]->Mueve(Fils, Cols);
+			handleEvents();
+			SDL_Delay(50);
 		}
-		Colision();
-		map->AnimVit();
-		pacman->Contador();
-		GUI();
 
 	}
 	if (exit)
@@ -379,6 +392,7 @@ void Game::MenuEvents()
 		}
 	}
 }
+
 int Game::PacManX()
 {
 	return(pacman->getPosX());

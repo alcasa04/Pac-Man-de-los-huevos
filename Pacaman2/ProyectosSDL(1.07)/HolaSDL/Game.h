@@ -25,8 +25,6 @@ private:
 
 	//puntero a mapa del juego
 	GameMap* map = nullptr;
-
-	SmartGhost* smart = nullptr;
 	
 	//puntero a pacman
 	PacMan* pacman = nullptr;
@@ -34,6 +32,12 @@ private:
 	//array de punteros a fantasmas
 	Ghost* ghosts[4];
 
+	//si el juego esta pausado o no
+	bool pausa = false;
+
+	//si es nueva partida o carga de partida guardada
+	int estadoMenu = 1;
+	//vector de enemigos
 	vector<SmartGhost*> enemies;
 
 
