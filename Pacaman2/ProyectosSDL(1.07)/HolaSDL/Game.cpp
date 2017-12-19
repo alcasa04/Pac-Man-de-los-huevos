@@ -263,6 +263,7 @@ void Game::handleEvents() {
 			}
 			else if (evento.key.keysym.sym == SDLK_s)
 			{
+				SaveToFile();
 				if (!pausa)pausa = true;
 				else pausa = false;
 
@@ -281,6 +282,10 @@ void Game::run()
 		if(menuAnim == 1)SDL_Delay(700);
 
 		else(SDL_Delay(400));
+	}
+	if (carga)
+	{
+		LoadFromFile();
 	}
 	while (!finJuego() && !exit) {
 		if (!pausa)
@@ -394,6 +399,11 @@ void Game::MenuEvents()
 			{
 				comienza = true;
 			}
+			if (evento.key.keysym.sym == SDLK_c)
+			{
+				carga = true;
+				comienza = true;
+			}
 		}
 	}
 }
@@ -505,4 +515,28 @@ void Game::creaFantasma(int posX, int posY)
 		else if (posibles[random] == 3)posX--;
 		enemies.push_back(new SmartGhost(posX, posY, render, this));
 	}
+}
+
+void Game::CargaEvents()
+{
+	/*while (SDL_PollEvent(&evento))
+	{
+		if (evento.type == SDL_QUIT)
+		{
+			exit = true;
+		}
+		else if (evento.type == SDL_KEYDOWN) {
+			if (evento.key.keysym.sym == SDLK_SPACE)
+			{
+				comienza = true;
+			}
+			if (evento.key.keysym.sym == SDLK_c)
+			{
+				carga = true;
+				comienza = true;
+			}
+		}
+	}
+	*/
+
 }

@@ -38,6 +38,7 @@ private:
 	//si el juego esta pausado o no
 	bool pausa = false;
 
+	bool carga = false;
 	//si es nueva partida o carga de partida guardada
 	int estadoMenu = 1;
 	//vector de enemigos
@@ -117,5 +118,6 @@ public:
 	int getFils();
 	int getCols();
 	void creaFantasma(int posX, int posY);
+	void CargaEvents();
 };
 
