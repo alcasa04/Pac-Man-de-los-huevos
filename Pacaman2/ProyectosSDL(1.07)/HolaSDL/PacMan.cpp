@@ -210,7 +210,15 @@ bool PacMan::saveToFile(ofstream archivo)
 	archivo << IniX << " " << IniY << endl;
 	archivo << PosX << " " << PosX << endl;
 	archivo << contador << endl;
+
+	return !archivo.fail();
 }
 bool PacMan::loadFromFile(ifstream archivo)
 {
+	archivo >> IniX >> IniY;
+	archivo >> PosX >> PosY;
+	archivo >> contador;
+
+	return !archivo.fail();
+
 }

@@ -80,8 +80,17 @@ void GameMap::AnimVit()
 }
 //Cambia la animación de la vitamina
 
-bool GameMap::loadFromFile(ifstream archivp) {
-	return true;
+bool GameMap::loadFromFile(ifstream archivo) {
+	int aux = 0;
+
+	archivo >> Fils >> Cols;
+	for (int i = 0; i < Fils; i++) {
+		for (int j = 0; j < Cols; j++) {
+			archivo >> aux;
+			(int)tablero[i][j] = aux;
+		}
+	}
+	return !archivo.fail();
 };
 
 void GameMap::Render() {};

@@ -175,7 +175,11 @@ void SmartGhost::update() {
 }
 
 bool SmartGhost::loadFromFile(ifstream archivo) {
-	return true;
+	archivo >> IniX >> IniY;
+	archivo >> PosX >> PosY;
+	archivo >> edad;
+
+	return !archivo.fail();
 }
 
 bool SmartGhost::saveToFile(ofstream archivo) {

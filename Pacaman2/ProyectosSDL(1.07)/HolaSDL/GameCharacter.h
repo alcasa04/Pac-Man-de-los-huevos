@@ -21,9 +21,9 @@ protected:
 
 	SDL_Renderer* render = nullptr;
 
-	bool loadFromFile(ifstream archivo);
-	void Render();
-	void update();
-	bool saveToFile(ofstream archivo);
+	virtual bool loadFromFile(ifstream archivo);
+	virtual void Render();
+	virtual void update();
+	virtual bool saveToFile(ofstream archivo);
 };
 

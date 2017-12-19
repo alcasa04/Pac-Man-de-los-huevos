@@ -45,10 +45,10 @@ public:
 	void CambiaDir();
 	void SetInicio();
 
-	void Render();
-	void update();
-	bool loadFromFile(ifstream archivo);
-	bool saveToFile(ofstream archivo);
+	virtual void Render();
+	virtual void update();
+	virtual bool loadFromFile(ifstream archivo);
+	virtual bool saveToFile(ofstream archivo);
 
 	void SumaEdad();
 };

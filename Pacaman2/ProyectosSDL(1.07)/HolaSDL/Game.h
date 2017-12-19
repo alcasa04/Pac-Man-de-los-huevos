@@ -104,5 +104,6 @@ public:
 	int PacManY();
 
 	bool SaveToFile();
+	bool LoadFromFile();
 };
 

@@ -371,8 +371,32 @@ bool Game::SaveToFile() {
 			if (!lista[i]->saveToFile(archivo))error = true;
 			*/
 		//iterator* i = new iterator();
+		//quedan los fantasmas
 
 		archivo.close();
 		return archivo.fail();
 	}
+}
+
+bool Game::LoadFromFile() {
+	string entrada, nivel;
+	ifstream archivo;
+	archivo.open("Save.txt");
+	archivo >> nivel;
+	cin >> entrada;
+	if (entrada == nivel) {
+		map = new GameMap(0, 0, render);
+		if (!map->loadFromFile(archivo))error = true;
+
+		pacman = new PacMan(0, 0, render, this);
+		if (!pacman->loadFromFile(archivo))error = true;
+
+		/*int aux = 0;
+		archivo >> aux;
+		for (int i = 0; i < aux; i++) {
+			lista.push_back(new GameCharacter(0, 0, this));
+
+		}*/
+	}
+	archivo.close();
 }
