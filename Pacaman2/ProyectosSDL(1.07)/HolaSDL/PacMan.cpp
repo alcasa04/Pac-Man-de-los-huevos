@@ -172,9 +172,9 @@ void PacMan::Contador()
 }
 //Calcula el tiempo que esta Pac-Man en modo "COME"
 
-void PacMan::RestartContador()
+void PacMan::RestartContador(int n)
 {
-	contador = 0;
+	contador = n;
 }
 //Devuelve el contador a 0
 
@@ -208,7 +208,7 @@ void PacMan::Render() {}
 bool PacMan::saveToFile(ofstream& archivo)
 {
 	archivo << IniX << " " << IniY << endl;
-	archivo << PosX << " " << PosX << endl;
+	archivo << PosX << " " << PosY << endl;
 	archivo << contador << endl;
 
 	return !archivo.fail();

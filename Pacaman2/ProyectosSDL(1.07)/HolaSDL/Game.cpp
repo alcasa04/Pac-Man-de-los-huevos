@@ -21,21 +21,19 @@ Game::Game()
 
 
 	else {
-		string level;
-	//aqui va el codigo que queremos ejecutar
-		if (Nivel < 10) {
-			level = "Level0" + to_string(Nivel) + ".dat";
-			SetMap(level);
+			string level;
+			//aqui va el codigo que queremos ejecutar
+			if (Nivel < 10) {
+				level = "Level0" + to_string(Nivel) + ".dat";
+				SetMap(level);
+			}
+			else level = "Level" + to_string(Nivel) + ".dat";
+			LoadTextures();
 		}
-		else level = "Level" + to_string(Nivel) + ".dat";
-		LoadTextures();
-
-	}
 }
 
 //Lee de archivo y crea un tablero con la información dada
 bool Game::SetMap(string filename) {
-
 
 	int aux = 0;
 	//variable auxiliar para leer de archivo y asignar los distintos tipos de casillas
@@ -56,12 +54,11 @@ bool Game::SetMap(string filename) {
 				//leemos el siguiente numero del archivo
 
 
-				if (aux < 5)
+				if (aux < 4)
 				{
 					map->SetCell(i, j, (MapCells)aux);
 					if (aux == 2) maxPunt++;
 				}
-
 				else if(aux <9){
 					map->SetCell(i, j, Vacio);
 					ghosts[aux - 5] = new Ghost(i, j, render, this);
@@ -74,10 +71,15 @@ bool Game::SetMap(string filename) {
 
 			}
 		}
+		maxComida = maxPunt;
 	}
+	int auxi = enemies.size();
+	for (int i = 0; i < auxi; i++)
+		enemies.pop_back();
 	enemies.push_back(new SmartGhost(1, 1, render, this));
-	enemies.push_back(new SmartGhost(1, 3, render, this));
+	enemies.push_back(new SmartGhost(1, 3 ,render, this));
 	archivo.close();
+	pacman->RestartContador(50);
 	return !archivo.fail();
 }
 
@@ -159,25 +161,33 @@ void Game::Update()
 	{
 		map->SetCell(pacman->getPosX(), pacman->getPosY(), Vacio);
 		puntos++;
-		//cout << puntos <<endl;
+		ActComida++;
 	}
 	else if (map->tablero[pacman->getPosY()][pacman->getPosX()] == Vitamina)
 	{
 		pacman->Come = true;
-		pacman->RestartContador();
+		pacman->RestartContador(0);
 		map->SetCell(pacman->getPosX(), pacman->getPosY(), Vacio);
 	}
 }
 
 //Comprueba si tu puntuación es igual a la puntuación máxima
-bool Game::finJuego()
+void Game::finJuego()
 {
-	if (puntos >= maxPunt)
+
+	if (ActComida >= maxComida)
 	{
-		return true;
+		Nivel++;
+		if (Nivel < 10) {
+			string level = "Level0" + to_string(Nivel) + ".dat";
+			SetMap(level);
+		}
+		else
+		{
+			string level = "Level" + to_string(Nivel) + ".dat";
+			SetMap(level);
+		}
 	}
-	else
-		return false;
 }
 
 //Comprueba el choque entre Pac-Man y los Fantasmas
@@ -193,25 +203,29 @@ void Game::Colision()
 		else if (pacman->getPosX() == ghosts[i]->getPosX() && pacman->getPosY() == ghosts[i]->getPosY() && pacman->Come == true)
 		{
 			ghosts[i]->SetInicio();
+			puntos += 10;
 		}
 
 	}
 	for(int i = 0; i < enemies.size(); i++)
     {
-		if (pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && pacman->Come == false)
+		if (pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && pacman->Come == false && !enemies[i]->estaMuerto())
 		{
 			exit = true;
 		}
 		else if(pacman->getPosX() == enemies[i]->getPosX() && pacman->getPosY() == enemies[i]->getPosY() && (pacman->Come == true || enemies[i]->estaMuerto()))
 		{
-			enemies[i]->SetInicio();
+			if (!enemies[i]->estaMuerto()) {
+				enemies[i]->SetInicio();
+				puntos += 15;
+			}
 		}
 		for (int j = 0; j < enemies.size(); j++)
 		{
 			if (i != j && enemies[i]->getPosX() == enemies[j]->getPosX() && enemies[i]->getPosY() == enemies[j]->getPosY() &&
 				enemies[i]->esAdulto() && enemies[j]->esAdulto() && enemies[i]->esPadre() == false && enemies[j]->esPadre() == false)
 			{
-				cout << "añgo";
+				
 				creaFantasma(enemies[i]->getPosX(), enemies[i]->getPosY());
 				enemies[i]->CambiaPapa();
 				enemies[j]->CambiaPapa();
@@ -231,6 +245,9 @@ Game::~Game()
 	SDL_DestroyRenderer(render);
 	delete map;
 	delete menu;
+	for (int i = 0; i < enemies.size(); i++) {
+		delete enemies[i];
+	}
 
 	//destruimos todo
 	
@@ -261,6 +278,13 @@ void Game::handleEvents() {
 			{
 				pacman->CambiaDir(0);
 			}
+			else if (evento.key.keysym.sym == SDLK_s)
+			{
+				SaveToFile();
+				if (!pausa)pausa = true;
+				else pausa = false;
+
+			}
 		}
 	}
 }
@@ -272,36 +296,51 @@ void Game::run()
 	{
 		MenuEvents();
 		Menu();
-		if(menuAnim == 1)SDL_Delay(700);
+		if(menuAnim == 1)SDL_Delay(500);
 
-		else(SDL_Delay(400));
+		else(SDL_Delay(200));
 	}
-	while (!finJuego() && !exit) {
+	if (carga)
+	{
+		LoadFromFile();
+	}
+	while (!exit) {
+		if (!pausa)
+		{
 		SDL_Delay(75);
 		handleEvents();
 		Update();
 		Renderizado();
 		pacman->Mueve(Fils,Cols);
-		//smart->Mueve(Fils, Cols);
 		Colision();
-		for (int i = 0; i < 4; i++)
-		{
-			ghosts[i]->Mueve(Fils, Cols);
+			for (int i = 0; i < 4; i++)
+			{
+				ghosts[i]->Mueve(Fils, Cols);
+			}
+			for (int i = 0; i < enemies.size(); i++)
+			{
+				enemies[i]->Mueve(Fils, Cols);
+			}
+			Colision();
+			map->AnimVit();
+			pacman->Contador();
+			GUI();
+			finJuego();
 		}
-		for (int i = 0; i < enemies.size(); i++)
+		else
 		{
-			enemies[i]->Mueve(Fils, Cols);
+			handleEvents();
+			SDL_Delay(50);
 		}
-		Colision();
-		map->AnimVit();
-		pacman->Contador();
-		GUI();
 
 	}
 	if (exit)
 		cout << "Perdiste!" << endl;
 	else
+	{
 		cout << "Ganaste!" << endl;
+
+	}
 	exit = true;
 }
 
@@ -309,7 +348,7 @@ void Game::run()
 void Game::GUI()
 {
 	system("cls");
-	cout << puntos << "/" << maxPunt << endl;
+	cout <<"Puntos: "<< puntos << endl;
 }
 
 //Comprueba si la casilla destino está disponible para desplazarse
@@ -376,14 +415,37 @@ void Game::MenuEvents()
 		{
 			exit = true;
 		}
+		/*
 		else if (evento.type == SDL_KEYDOWN) {
 			if(evento.key.keysym.sym == SDLK_SPACE)
 			{
 				comienza = true;
 			}
+			if (evento.key.keysym.sym == SDLK_c)
+			{
+				carga = true;
+				comienza = true;
+			}
+		}
+		*/
+		else if (evento.type == SDL_MOUSEBUTTONDOWN)
+		{
+			int x, y;
+			SDL_GetMouseState(&x, &y);
+			if (x > WinWidth / 2 - 100 && x < WinWidth / 2 + 100 && y > WinHeight / 2 + 175 && y < WinHeight / 2 + 205)
+			{
+				comienza = true;
+			}
+			else if (x > WinWidth / 2 - 100 && x < WinWidth / 2 + 100 && y > WinHeight / 2 + 220 && y < WinHeight / 2 + 250)
+			{
+				comienza = true;
+				carga = true;
+			}
+			
 		}
 	}
 }
+
 int Game::PacManX()
 {
 	return(pacman->getPosX());
@@ -402,7 +464,7 @@ bool Game::SaveToFile() {
 		ofstream archivo;
 		archivo.open("Save.txt");
 		archivo << entrada << endl;
-		archivo << puntos << endl;
+		archivo << puntos <<" "<< ActComida <<" "<< maxComida<< endl;
 		if (!map->saveToFile(archivo))error = true;
 		if (!pacman->saveToFile(archivo))error = true;
 
@@ -410,7 +472,7 @@ bool Game::SaveToFile() {
 			if (!ghosts[i]->saveToFile(archivo))error = true;
 		}
 
-		archivo << enemies.size();
+		archivo << enemies.size() << endl;
 		for (int i = 0; i < enemies.size(); i++) {
 			if (!enemies[i]->saveToFile(archivo))error = true;
 		}
@@ -427,12 +489,16 @@ bool Game::SaveToFile() {
 }
 
 bool Game::LoadFromFile() {
+	int aux = enemies.size();
+	for (int i = 0; i < aux; i++)
+		enemies.pop_back();
 	string entrada, code;
 	ifstream archivo;
 	cin >> entrada;
 	archivo.open("Save.txt");
 	archivo >> code;
 	if (entrada == code) {
+		archivo >> puntos >> ActComida >> maxComida;
 		map = new GameMap(0, 0, render);
 		if (!map->loadFromFile(archivo))error = true;
 
@@ -443,7 +509,6 @@ bool Game::LoadFromFile() {
 			ghosts[i] = new Ghost(0, 0, render, this);
 			if (!ghosts[i]->loadFromFile(archivo))error = true;
 		}
-
 		int numEnemies = 0;
 		archivo >> numEnemies;
 		for (int i = 0; i < numEnemies; i++) {
@@ -491,4 +556,28 @@ void Game::creaFantasma(int posX, int posY)
 		else if (posibles[random] == 3)posX--;
 		enemies.push_back(new SmartGhost(posX, posY, render, this));
 	}
+}
+
+void Game::CargaEvents()
+{
+	/*while (SDL_PollEvent(&evento))
+	{
+		if (evento.type == SDL_QUIT)
+		{
+			exit = true;
+		}
+		else if (evento.type == SDL_KEYDOWN) {
+			if (evento.key.keysym.sym == SDLK_SPACE)
+			{
+				comienza = true;
+			}
+			if (evento.key.keysym.sym == SDLK_c)
+			{
+				carga = true;
+				comienza = true;
+			}
+		}
+	}
+	*/
+
 }

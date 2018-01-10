@@ -5,7 +5,7 @@
 #include<fstream>
 #include "Texture.h"
 #include<vector>
-#include<list>
+//#include<list>
 
 class GameCharacter;
 class PacMan;
@@ -26,17 +26,22 @@ private:
 
 	//puntero a mapa del juego
 	GameMap* map = nullptr;
-
-	SmartGhost* smart = nullptr;
 	
 	//puntero a pacman
 	PacMan* pacman = nullptr;
 
-	list<GameCharacter*> lista;
+	//list<GameCharacter*> lista;
 
 	//array de punteros a fantasmas
 	Ghost* ghosts[4];
 
+	//si el juego esta pausado o no
+	bool pausa = false;
+
+	bool carga = false;
+	//si es nueva partida o carga de partida guardada
+	int estadoMenu = 1;
+	//vector de enemigos
 	vector<SmartGhost*> enemies;
 
 
@@ -67,9 +72,11 @@ private:
 	int Fils = 0,
 		Cols = 0;
 
-	int puntos = 0;
+	int puntos = 0,
+		ActComida= 0,
+		maxComida = 0;
 	int maxPunt = 0;
-	int Nivel =5 ;
+	int Nivel =1 ;
 
 	//numero de imagenes o texturas que se van a cargar
 	const int numText = 4;
@@ -101,7 +108,7 @@ public:
 	bool NextCell(int x, int y, int dir);
 	void Update();
 	void Colision();
-	bool finJuego();
+	void finJuego();
 	void Menu();
 	void MenuEvents();
 	int PacManX();
@@ -113,5 +120,6 @@ public:
 	int getFils();
 	int getCols();
 	void creaFantasma(int posX, int posY);
+	void CargaEvents();
 };
 

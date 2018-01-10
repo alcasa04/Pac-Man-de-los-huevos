@@ -52,7 +52,7 @@ public:
 	~PacMan();
 	//destructora
 	bool Come = false;
-	void RestartContador();
+	void RestartContador(int n);
 	void Mueve(int fils, int cols);
 	void CambiaDir(int newdir);
 

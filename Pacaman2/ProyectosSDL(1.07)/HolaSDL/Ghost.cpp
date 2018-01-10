@@ -135,7 +135,7 @@ bool Ghost::loadFromFile(ifstream& archivo) {
 
 bool Ghost::saveToFile(ofstream& archivo) {
 	archivo << IniX << " " << IniY << endl;
-	archivo << PosX << " " << IniX << endl;
+	archivo << PosX << " " << PosY << endl;
 
 	return !archivo.fail();
 }
