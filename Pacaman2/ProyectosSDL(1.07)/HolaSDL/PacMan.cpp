@@ -180,6 +180,7 @@ void PacMan::RestartContador(int n)
 
 void PacMan::RenderPac(SDL_Rect recta)
 {
+	throw new PacManError("Error initializing the game");
 	int f = 0;
 	bool acaba = false;
 	while (f< 4 && !acaba)

@@ -77,6 +77,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PacMan.cpp" />
     <ClCompile Include="PacManError.cpp" />
+    <ClCompile Include="SDLError.cpp" />
     <ClCompile Include="SmartGhost.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
@@ -89,6 +90,7 @@
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="PacMan.h" />
     <ClInclude Include="PacManError.h" />
+    <ClInclude Include="SDLError.h" />
     <ClInclude Include="SmartGhost.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>

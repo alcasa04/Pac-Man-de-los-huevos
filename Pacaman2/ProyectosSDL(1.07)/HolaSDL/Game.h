@@ -18,6 +18,7 @@ using namespace std;
 class Game 
 {
 private:
+
 	//variables window de la SDL
 	SDL_Window*window = nullptr;
 

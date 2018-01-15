@@ -1,5 +1,6 @@
 #pragma once
 #include"GameCharacter.h"
+#include"PacManError.h"
 
 class Game;
 

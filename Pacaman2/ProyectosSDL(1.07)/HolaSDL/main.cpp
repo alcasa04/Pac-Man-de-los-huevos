@@ -2,14 +2,21 @@
 #include "SDL_image.h"
 #include <iostream>
 #include"Game.h"
+#include "PacManError.h"
 
 using namespace std;
 
 int main(int argc, char* argv[]){
-	Game* game = new Game();
-	game->run();
-	SDL_Quit();
-	game->~Game();
+	try {
+		Game* game = new Game();
+		game->run();
+		SDL_Quit();
+		game->~Game();
+	}
+	catch(int e)
+	{
+		throw new PacManError("Error initializing the game");
+	}
 	
 	return 0;
 }
