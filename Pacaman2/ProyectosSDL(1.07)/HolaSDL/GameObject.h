@@ -1,13 +1,11 @@
 #pragma once
 #include<iostream>
-#include"Game.h"
+#include "Game.h"
 
 using namespace std;
 
 class GameObject
 {
-	//Game* game = new Game();
-
 public:
 	GameObject();
 	virtual ~GameObject()=0;

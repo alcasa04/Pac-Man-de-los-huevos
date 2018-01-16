@@ -24,6 +24,7 @@ enum MapCells
 
 class GameMap : public GameObject
 {
+	friend class GameState;
 	friend class Game;
 	//Game puede acceder a campos privados de GameMap
 private:
@@ -65,5 +66,7 @@ public:
 	virtual void Render();
 	virtual void update();
 	virtual bool saveToFile(ofstream& archivo);
+
+	MapCells** getTablero() { return tablero; };
 };
 

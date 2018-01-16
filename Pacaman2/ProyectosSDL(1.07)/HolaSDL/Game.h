@@ -4,9 +4,10 @@
 #include<iostream>
 #include<fstream>
 #include "Texture.h"
+//#include"GameStateMachine.h"
 #include<vector>
-//#include<list>
 
+class GameStateMachine;
 class GameCharacter;
 class PacMan;
 class Ghost;
@@ -18,6 +19,8 @@ using namespace std;
 class Game 
 {
 private:
+	
+	GameStateMachine* stateMachine = nullptr;
 
 	//variables window de la SDL
 	SDL_Window*window = nullptr;
@@ -122,5 +125,9 @@ public:
 	int getCols();
 	void creaFantasma(int posX, int posY);
 	void CargaEvents();
+
+	SDL_Renderer* getRender() { return render; }
+	SDL_Window* getWindow() { return window; }
+	GameStateMachine* getMachine() { return stateMachine; };
 };
 

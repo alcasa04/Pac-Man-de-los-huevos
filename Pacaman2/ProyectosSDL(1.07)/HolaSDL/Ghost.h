@@ -48,7 +48,7 @@ public:
 	void Mueve(int fils, int cols);
 	void CambiaDir();
 	void SetInicio();
-
+	
 	void Render();
 	void update();
 	bool loadFromFile(ifstream& archivo);

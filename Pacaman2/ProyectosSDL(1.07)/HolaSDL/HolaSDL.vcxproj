@@ -72,11 +72,13 @@
     <ClCompile Include="GameCharacter.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GameStateMachine.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PacMan.cpp" />
     <ClCompile Include="PacManError.cpp" />
+    <ClCompile Include="PlayState.cpp" />
     <ClCompile Include="SDLError.cpp" />
     <ClCompile Include="SmartGhost.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -86,10 +88,12 @@
     <ClInclude Include="GameCharacter.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="PacMan.h" />
     <ClInclude Include="PacManError.h" />
+    <ClInclude Include="PlayState.h" />
     <ClInclude Include="SDLError.h" />
     <ClInclude Include="SmartGhost.h" />
     <ClInclude Include="Texture.h" />

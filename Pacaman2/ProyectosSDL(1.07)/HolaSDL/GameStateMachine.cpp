@@ -11,6 +11,9 @@ GameStateMachine::~GameStateMachine()
 {
 }
 
+/*void GameStateMachine::PushState(GameState newstate) {
+	gameStack.push(newstate);
+}*/
 
 /*
 calss playstate: gamestate{
@@ -50,4 +53,4 @@ texture* text;
 bool handleEvent(...e){
 if(pulsado de boton....)´{
 	if(sdl-pointInRect(...)//dice si el click esta dentro de un rectangulo
-		cout<<"boton pulsado";
+		cout<<"boton pulsado";*/
