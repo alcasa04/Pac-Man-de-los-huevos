@@ -7,7 +7,7 @@ class MenuState:public GameState
 private:
 	vector<Button*> MenuButtons;
 public:
-	MenuState();
+	MenuState(Game* game);
 	~MenuState();
 	static void GoToPlay(Game* game);
 	static void Exit(Game* game);

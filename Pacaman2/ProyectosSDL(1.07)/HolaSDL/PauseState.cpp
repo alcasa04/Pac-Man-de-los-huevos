@@ -3,7 +3,7 @@
 #include"GameStateMachine.h"
 
 
-PauseState::PauseState():GameState()
+PauseState::PauseState(Game* game):GameState(game)
 {
 	SDL_Rect auxRect;
 	auxRect.x = winWidth / 2 - 50;
@@ -37,7 +37,7 @@ void PauseState::Resume(Game* game) {
 }
 
 void PauseState::Save(Game* game) {
-	game->SaveToFile();
+	//game->SaveToFile();
 	for (int i = 0; i < 3; i++)
 		game->getMachine()->PopState();
 }

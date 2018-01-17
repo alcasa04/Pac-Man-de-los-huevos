@@ -46,7 +46,7 @@ private:
 
 public:
 
-	GameMap(int fils, int cols, SDL_Renderer* render);
+	GameMap(int fils, int cols, SDL_Renderer* render, PlayState* play);
 	//constructora que crea un tablero de fils X cols
 
 	~GameMap();

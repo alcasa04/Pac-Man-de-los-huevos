@@ -2,6 +2,8 @@
 #include"Game.h"
 #include"GameMap.h"
 
+#include"PlayState.h"
+
 PacMan::PacMan() : GameCharacter(0,0, nullptr){
 	PosX = PosY = IniX = IniY = 0;
 	//si no le pasamos parametros, asumiremos que PacMan esta en la posicion (0,0)
@@ -12,7 +14,8 @@ PacMan::PacMan() : GameCharacter(0,0, nullptr){
 }
 */
 //Constructora predeterminada
-PacMan::PacMan(int x, int y, SDL_Renderer* rend, Game* game) : GameCharacter(x, y, game){
+PacMan::PacMan(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : GameCharacter(x, y, game){
+	play = plai;
 	PosX = IniX = x;
 	PosY = IniY = y;
 	dir = 0;
@@ -81,67 +84,86 @@ void PacMan::CambiaEstado(int i)
 
 void PacMan::Mueve(int fils, int cols) 
 {
-	if ((dir2 == 0)&& gueim->NextCell(PosX, PosY,dir2))
-	{
-		PosY = (PosY + 1)%cols;
-		dir = dir2;
-		dir2 = -1;
-		estado = DerCerrado;
-	}
-	else if ((dir2 == 1) && gueim->NextCell(PosX, PosY, dir2))
-	{
-		PosX = (PosX+1)%fils;
-		dir = dir2;
-		dir2 = -1;
-		estado = BotCerrado;
-	}
-	else if ((dir2 == 2) && gueim->NextCell(PosX, PosY, dir2))
-	{
-		if (PosY - 1 < 0) PosY = cols - 1;
+	if (dir2 >= 0) {
+		if (play->NextCell(PosX, PosY, dir2)) {
+			//int nx = PosX, ny = PosY;
+			if (dir2 == 0) {
+				PosY++;
+			}
+			else if (dir2 == 2)
+				PosY--;
+			else if (dir2 == 1)
+				PosX++;
+			else PosX--;
 
-		else PosY--;
-		dir = dir2;
-		dir2 = -1;
-		estado = IzqCerrado;
-	}
-	else if ((dir2 == 3) && gueim->NextCell(PosX, PosY, dir2))
-	{
-		if (PosX - 1 < 0) PosX = fils - 1;
-		else PosX--;
+			//toroide
+			if (PosX >= fils)
+				PosX = 0;
+			else if (PosX < 0)
+				PosX = fils - 1;
+			else if (PosY >= cols)
+				PosY = 0;
+			else if (PosY < 0)
+				PosY = cols;
+			dir = dir2;
+			dir2 = -1;
+		}
+		else {
+			if (play->NextCell(PosX, PosY, dir)) {
+				//int nx = PosX, ny = PosY;
+				if (dir == 0) {
+					PosY++;
+				}
+				else if (dir == 2)
+					PosY--;
+				else if (dir == 1)
+					PosX++;
+				else PosX--;
 
-		dir = dir2;
-		dir2 = -1;
-		estado = TopCerrado;
+				//toroide
+				if (PosX >= fils)
+					PosX = 0;
+				else if (PosX < 0)
+					PosX = fils - 1;
+				else if (PosY >= cols)
+					PosY = 0;
+				else if (PosY < 0)
+					PosY = cols;
+			}
+		}
+	}
+	else {
+		if (play->NextCell(PosX, PosY, dir)) {
+			//int nx = PosX, ny = PosY;
+			if (dir == 0) {
+				PosY++;
+			}
+			else if (dir == 2)
+				PosY--;
+			else if (dir == 1)
+				PosX++;
+			else PosX--;
+
+			//toroide
+			if (PosX >= fils)
+				PosX = 0;
+			else if (PosX < 0)
+				PosX = fils - 1;
+			else if (PosY >= cols)
+				PosY = 0;
+			else if (PosY < 0)
+				PosY = cols;
+		}
+		//cout << PosX << " " << PosY << endl;
 	}
 
-
-	else if ((dir == 0) && gueim->NextCell(PosX, PosY, dir))
-	{
-		PosY = (PosY + 1)%cols;
-	}
-	else if ((dir == 1) && gueim->NextCell(PosX, PosY, dir))
-	{
-		PosX= (PosX + 1) % fils;
-	}
-	else if ((dir == 2) && gueim->NextCell(PosX, PosY, dir))
-	{
-		if (PosY - 1 < 0) PosY = cols - 1;
-
-		else PosY--;
-	}
-	else if ((dir == 3) && gueim->NextCell(PosX, PosY, dir))
-	{
-		if (PosX - 1 < 0) PosX = fils - 1;
-
-		else PosX--;
-	}
-
+	
 }
 //Mueve a Pac-Man en la nueva dirección proporcionada, o en la dirección anterior en su defecto
 
 void PacMan::CambiaDir(int newdir)
 {
-	dir2 = newdir;
+  	dir2 = newdir;
 }
 //Cambia la nueva direccion de Pac-Man
 

@@ -27,18 +27,18 @@ private:
 	SDL_Window*window = nullptr;
 
 	//variable render de la SDL
-	SDL_Renderer* render = nullptr;
+	SDL_Renderer* render;
 
 	//puntero a mapa del juego
-	GameMap* map = nullptr;
+	//GameMap* map = nullptr;
 	
 	//puntero a pacman
-	PacMan* pacman = nullptr;
+	//PacMan* pacman = nullptr;
 
 	//list<GameCharacter*> lista;
 
 	//array de punteros a fantasmas
-	Ghost* ghosts[4];
+	//Ghost* ghosts[4];
 
 	//si el juego esta pausado o no
 	bool pausa = false;
@@ -81,7 +81,7 @@ private:
 		ActComida= 0,
 		maxComida = 0;
 	int maxPunt = 0;
-	int Nivel =1 ;
+	int Nivel =1;
 
 	//numero de imagenes o texturas que se van a cargar
 	const int numText = 4;
@@ -98,7 +98,7 @@ public:
 	~Game();
 
 	//carga un mapa de un fichero de texto dado
-	bool SetMap(string filename);
+	//bool SetMap(string filename);
 
 	//carga todas las texturas (en este caso, 4)
 	void LoadTextures();
@@ -106,20 +106,20 @@ public:
 	void GUI();
 
 	void run();
-	void Renderizado();
+	//void Renderizado();
 	void handleEvents();
 
-	bool NextCell(int x, int y, int dir);
+	//bool NextCell(int x, int y, int dir);
 	void Update();
-	void Colision();
-	void finJuego();
+	//void Colision();
+	//void finJuego();
 	void Menu();
 	void MenuEvents();
-	int PacManX();
-	int PacManY();
+	//int PacManX();
+	//int PacManY();
 
-	bool SaveToFile();
-	bool LoadFromFile();
+	//bool SaveToFile();
+	//bool LoadFromFile();
 
 	int getFils();
 	int getCols();

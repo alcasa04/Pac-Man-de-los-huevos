@@ -12,7 +12,9 @@ GameStateMachine::~GameStateMachine()
 
 GameState* GameStateMachine::CurrentState() { return gameStack.top(); }
 
-void GameStateMachine::PushState(GameState* next) { gameStack.push(next); }
+void GameStateMachine::PushState(GameState* next) 
+{
+	gameStack.push(next); }
 
 void GameStateMachine::PopState() {
 	GameState* aux = gameStack.top();

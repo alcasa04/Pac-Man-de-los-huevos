@@ -5,11 +5,15 @@
 #include "SmartGhost.h"
 #include"GameStateMachine.h"
 
+#include"MenuState.h"
+#include"PlayState.h"
+#include"EndState.h"
+#include"PauseState.h"
 //Constructora de Game
 Game::Game()
 {
 	//pacman = new PacMan();
-
+	stateMachine = new GameStateMachine();
 	//inicializacion normal de la SDL
 	//visto en los slides de clase
 	int winX, winY;
@@ -26,15 +30,15 @@ Game::Game()
 			//aqui va el codigo que queremos ejecutar
 			if (Nivel < 10) {
 				level = "Level0" + to_string(Nivel) + ".dat";
-				SetMap(level);
 			}
 			else level = "Level" + to_string(Nivel) + ".dat";
 			LoadTextures();
+			//SetMap(level);
 		}
 }
 
 //Lee de archivo y crea un tablero con la información dada
-bool Game::SetMap(string filename) {
+/*bool Game::SetMap(string filename) {
 
 	int aux = 0;
 	//variable auxiliar para leer de archivo y asignar los distintos tipos de casillas
@@ -82,17 +86,16 @@ bool Game::SetMap(string filename) {
 	archivo.close();
 	pacman->RestartContador(50);
 	return !archivo.fail();
-}
+}*/
 
 //Carga la imagen del Menú
 void Game::LoadTextures() {
-
 	if (!menu->loadText("..\\images\\Pac-Titulo.png", 1, 2, render))error = true;
 	//menu
 }
 
 //Comprueba las casillas del tablero, y llama al renderizado de cada una (al GameMap, al Pac-Man y a los Fantasmas)
-void Game::Renderizado(){
+/*void Game::Renderizado(){
 	SDL_RenderClear(render);
 	//const porque lo ponia en los slides 
 
@@ -153,27 +156,16 @@ void Game::Renderizado(){
 	}
 	SDL_RenderPresent(render);
 	//pintamos la escena
-}
+}*/
 
 //Hace que el Pac-Man se coma la comida y las vitaminas
 void Game::Update()
 {
-	if (map->tablero[pacman->getPosY()][pacman->getPosX()] == Comida)
-	{
-		map->SetCell(pacman->getPosX(), pacman->getPosY(), Vacio);
-		puntos++;
-		ActComida++;
-	}
-	else if (map->tablero[pacman->getPosY()][pacman->getPosX()] == Vitamina)
-	{
-		pacman->Come = true;
-		pacman->RestartContador(0);
-		map->SetCell(pacman->getPosX(), pacman->getPosY(), Vacio);
-	}
+	stateMachine->CurrentState()->Update();
 }
 
 //Comprueba si tu puntuación es igual a la puntuación máxima
-void Game::finJuego()
+/*void Game::finJuego()
 {
 	if (ActComida >= maxComida)
 	{
@@ -188,10 +180,10 @@ void Game::finJuego()
 			SetMap(level);
 		}
 	}
-}
+}*/
 
 //Comprueba el choque entre Pac-Man y los Fantasmas
-void Game::Colision()
+/*void Game::Colision()
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -232,14 +224,14 @@ void Game::Colision()
 			}
 		}
 	}
-}
+}*/
 
 //Destructora de Game
 Game::~Game()
 {
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
-		delete ghosts[i];
+		//delete ghosts[i];
 	}
 	delete pacman;
 	SDL_DestroyRenderer(render);
@@ -250,8 +242,9 @@ Game::~Game()
 	}
 
 	//destruimos todo
-	
+	*/
 }
+
 
 //Comprueba pulsaciones de teclado y actua conforme a ello
 void Game::handleEvents() {
@@ -261,30 +254,8 @@ void Game::handleEvents() {
 		{
 			exit = true;
 		}
-		else if (evento.type == SDL_KEYDOWN) {
-			if(evento.key.keysym.sym == SDLK_UP)
-			{
-				pacman->CambiaDir(3);
-			}
-			else if (evento.key.keysym.sym == SDLK_LEFT)
-			{
-				pacman->CambiaDir(2);
-			}
-			else if (evento.key.keysym.sym == SDLK_DOWN)
-			{
-				pacman->CambiaDir(1);
-			}
-			else if (evento.key.keysym.sym == SDLK_RIGHT)
-			{
-				pacman->CambiaDir(0);
-			}
-			else if (evento.key.keysym.sym == SDLK_s)
-			{
-				SaveToFile();
-				if (!pausa)pausa = true;
-				else pausa = false;
-
-			}
+		else {
+			stateMachine->CurrentState()->HandleEvent(evento);
 		}
 	}
 }
@@ -292,47 +263,22 @@ void Game::handleEvents() {
 //Realiza los bucles principales del juego (Menu y juego), realizando sus correspondientes llamadas
 void Game::run()
 {
-	while (!comienza)
-	{
-		MenuEvents();
-		Menu();
-		if(menuAnim == 1)SDL_Delay(500);
-
-		else(SDL_Delay(200));
-	}
-	if (carga)
-	{
-		LoadFromFile();
-	}
-	while (!exit) {
-		if (!pausa)
-		{
+	stateMachine->PushState(new MenuState(this));
+	while (!exit && !stateMachine->empty()) {
+		//if (!pausa)
+		//{
 		SDL_Delay(75);
-		handleEvents();
+		//stateMachine->CurrentState()->HandleEvent();
 		Update();
-		Renderizado();
-		pacman->Mueve(Fils,Cols);
-		Colision();
-			for (int i = 0; i < 4; i++)
-			{
-				ghosts[i]->Mueve(Fils, Cols);
-			}
-			for (int i = 0; i < enemies.size(); i++)
-			{
-				enemies[i]->Mueve(Fils, Cols);
-			}
-			Colision();
-			map->AnimVit();
-			pacman->Contador();
-			GUI();
-			finJuego();
-		}
-		else
-		{
-			handleEvents();
-			SDL_Delay(50);
-		}
-
+		stateMachine->CurrentState()->render();
+		//GUI();
+		//}
+		//else
+		//{
+		handleEvents();
+			//SDL_Delay(50);
+		//}
+		//handleEvents();
 	}
 	if (exit)
 		cout << "Perdiste!" << endl;
@@ -342,17 +288,18 @@ void Game::run()
 
 	}
 	exit = true;
+	//stateMachine->CurrentState()->render();
+	//SDL_Delay(2000);
 }
 
 //Muestra en consola la puntuación del modo: *Puntuación Actual/Puntuación Máxima*
 void Game::GUI()
 {
-	system("cls");
-	cout <<"Puntos: "<< puntos << endl;
+	//stateMachine->CurrentState();
 }
 
 //Comprueba si la casilla destino está disponible para desplazarse
-bool Game::NextCell(int y, int x, int dir)
+/*bool Game::NextCell(int y, int x, int dir)
 {
 	//Si se sale de pantalla hace recursión de NextCell en la posición contraria
 	if (dir == 0 && x + 1 >= Cols)
@@ -390,7 +337,7 @@ bool Game::NextCell(int y, int x, int dir)
 			return false;
 		else return true;
 	
-}
+}*/
 
 //Animacion del menu
 void Game::Menu()
@@ -446,16 +393,16 @@ void Game::MenuEvents()
 	}
 }
 
-int Game::PacManX()
+/*int Game::PacManX()
 {
 	return(pacman->getPosX());
 }
 int Game::PacManY()
 {
 	return(pacman->getPosY());
-}
+}*/
 
-bool Game::SaveToFile() {
+/*bool Game::SaveToFile() {
 	//lectura en pantalla y pausa del juego
 	string entrada;
 	cin >> entrada;
@@ -466,7 +413,7 @@ bool Game::SaveToFile() {
 		archivo << entrada << endl;
 		archivo << puntos <<" "<< ActComida <<" "<< maxComida<< endl;
 		if (!map->saveToFile(archivo))error = true;
-		if (!pacman->saveToFile(archivo))error = true;
+		//if (!pacman->saveToFile(archivo))error = true;
 
 		for (int i = 0; i < 4; i ++ ) {
 			if (!ghosts[i]->saveToFile(archivo))error = true;
@@ -479,16 +426,16 @@ bool Game::SaveToFile() {
 		/*
 		for (int i = 0; i < lista.size(); i++)
 			if (!lista[i]->saveToFile(archivo))error = true;
-			*/
+			
 		//iterator* i = new iterator();
 		//quedan los fantasmas
 
 		archivo.close();
 		return archivo.fail();
 	//}
-}
+}*/
 
-bool Game::LoadFromFile() {
+/*bool Game::LoadFromFile() {
 	int aux = enemies.size();
 	for (int i = 0; i < aux; i++)
 		enemies.pop_back();
@@ -502,8 +449,8 @@ bool Game::LoadFromFile() {
 		map = new GameMap(0, 0, render);
 		if (!map->loadFromFile(archivo))error = true;
 
-		pacman = new PacMan(0, 0, render, this);
-		if (!pacman->loadFromFile(archivo))error = true;
+		//pacman = new PacMan(0, 0, render, this);
+		//if (!pacman->loadFromFile(archivo))error = true;
 
 		for (int i = 0; i < 4; i++) {
 			ghosts[i] = new Ghost(0, 0, render, this);
@@ -515,16 +462,17 @@ bool Game::LoadFromFile() {
 			enemies.push_back(new SmartGhost(0, 0, render, this));
 			if (!enemies[i]->loadFromFile(archivo))error = true;
 		}
-		/*int aux = 0;
+		
+		int aux = 0;
 		archivo >> aux;
 		for (int i = 0; i < aux; i++) {
 			lista.push_back(new GameCharacter(0, 0, this));
 
-		}*/
+		}
 	}
 	archivo.close();
 	return !archivo.fail();
-}
+}*/
 
 int Game::getFils()
 {
@@ -534,7 +482,7 @@ int Game::getCols()
 {
 	return Cols;
 }
-void Game::creaFantasma(int posX, int posY)
+/*void Game::creaFantasma(int posX, int posY)
 {
 
 	int contador = 0;
@@ -557,31 +505,9 @@ void Game::creaFantasma(int posX, int posY)
 		else if (posibles[random] == 3)posX--;
 		enemies.push_back(new SmartGhost(posX, posY, render, this));
 	}
-}
+}*/
 
-void Game::CargaEvents()
-{
-	/*while (SDL_PollEvent(&evento))
-	{
-		if (evento.type == SDL_QUIT)
-		{
-			exit = true;
-		}
-		else if (evento.type == SDL_KEYDOWN) {
-			if (evento.key.keysym.sym == SDLK_SPACE)
-			{
-				comienza = true;
-			}
-			if (evento.key.keysym.sym == SDLK_c)
-			{
-				carga = true;
-				comienza = true;
-			}
-		}
-	}
-	*/
 
-}
 
 void Game::newState(GameState* newSt) {
 	stateMachine->PushState(newSt);

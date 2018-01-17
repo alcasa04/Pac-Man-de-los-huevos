@@ -31,7 +31,7 @@ public:
 	SmartGhost();
 	//constructora default, situa fantasma en (0,0)
 
-	SmartGhost(int x, int y, SDL_Renderer* rend, Game* game);
+	SmartGhost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* play);
 	//constructora que situa al fantasma en posicion (x,y)
 
 	~SmartGhost();

@@ -2,13 +2,16 @@
 #include"Game.h"
 #include"GameMap.h"
 
+#include"PlayState.h"
+
 Ghost::Ghost() : GameCharacter(0,0, nullptr){
 	IniX = IniY = PosX = PosY = 0;
 }
 //constructora default que deja el fantasma en la posicion (0,0)
 
-Ghost::Ghost(int x, int y, SDL_Renderer* rend, Game* game) : GameCharacter(x, y, game)
+Ghost::Ghost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : GameCharacter(x, y, game)
 {
+	play = plai;
 	PosX = IniX = x;
 	PosY = IniY = y;
 	dir = 0;
@@ -40,7 +43,7 @@ void Ghost::CambiaDir()
 	vector<int> posible;
 	for (int i = 0; i < 4; i++)
 	{
-		if (gueim->NextCell(PosX, PosY, i) && i != (dir + 2) % 4)
+		if (play->NextCell(PosX, PosY, i) && i != (dir + 2) % 4)
 		{
 			contador++;
 			posible.push_back(i);

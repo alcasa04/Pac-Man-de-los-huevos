@@ -47,7 +47,7 @@ public:
 	PacMan();
 	//constructora default
 
-	PacMan(int x, int y, SDL_Renderer* render, Game* game);
+	PacMan(int x, int y, SDL_Renderer* render, Game* game, PlayState* play);
 	//constructora que situa pacman en una posicion
 
 	~PacMan();

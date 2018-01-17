@@ -1,5 +1,2 @@
-﻿  PauseState.cpp
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\pausestate.cpp(26): warning C4018: '<': no coinciden signed/unsigned
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\pausestate.cpp(46): warning C4018: '<': no coinciden signed/unsigned
-c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\pausestate.cpp(55): warning C4018: '<': no coinciden signed/unsigned
+﻿  Game.cpp
   HolaSDL.vcxproj -> C:\Users\hecto\UNIVERSIDAD\2º\TPV\PacamanDef\Pac-Man-de-los-huevos\Pacaman2\ProyectosSDL(1.07)\bin\HolaSDLDebug.exe

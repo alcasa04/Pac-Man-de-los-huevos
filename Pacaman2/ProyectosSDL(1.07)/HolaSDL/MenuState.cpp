@@ -4,8 +4,9 @@
 #include"GameStateMachine.h"
 
 
-MenuState::MenuState():GameState()
+MenuState::MenuState(Game* game):GameState(game)
 {
+	gueim = game;
 	SDL_Rect auxRect;
 
 	auxRect.x = winWidth / 2 - 50;
@@ -31,7 +32,7 @@ MenuState::~MenuState()
 
 void MenuState::GoToPlay(Game* game) {
 	//gueim->newState(new PlayState());
-	game->newState(new PlayState());
+	game->newState(new PlayState(game));
 }
 
 void MenuState::Exit(Game* game) {
@@ -39,8 +40,8 @@ void MenuState::Exit(Game* game) {
 }
 
 void MenuState::LoadGame(Game* game) {
-	game->newState(new PlayState());
-	game->LoadFromFile();
+	game->newState(new PlayState(game, 0));
+	//game->LoadFromFile();
 }
 
 void MenuState::render() {

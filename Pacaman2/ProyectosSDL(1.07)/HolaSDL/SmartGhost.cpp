@@ -3,14 +3,16 @@
 #include"GameMap.h"
 #include "PacMan.h"
 
+#include"PlayState.h"
+
 SmartGhost::SmartGhost() : GameCharacter(0, 0, nullptr) {
 	IniX = IniY = PosX = PosY = 0;
 }
 //constructora default que deja el fantasma en la posicion (0,0)
 
-SmartGhost::SmartGhost(int x, int y, SDL_Renderer* rend, Game* game) : GameCharacter(x, y, game)
+SmartGhost::SmartGhost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : GameCharacter(x, y, game)
 {
-
+	play = plai;
 	PosX = IniX = x;
 	PosY = IniY = y;
 	dir = 0;
@@ -45,7 +47,7 @@ void SmartGhost::CambiaDir()
 		vector<int> posible;
 		for (int i = 0; i < 4; i++)
 		{
-			if (gueim->NextCell(PosX, PosY, i) && i != (dir + 2) % 4)
+			if (play->NextCell(PosX, PosY, i) && i != (dir + 2) % 4)
 			{
 				contador++;
 				posible.push_back(i);
@@ -71,7 +73,7 @@ void SmartGhost::CambiaDir()
 		vector<int> posibl;
 		for (int i = 0; i < 4; i++)
 		{
-			if (gueim->NextCell(PosX, PosY, i) && i != (dir + 2) % 4)
+			if (play->NextCell(PosX, PosY, i) && i != (dir + 2) % 4)
 			{
 				contad++;
 				posibl.push_back(i);
@@ -85,8 +87,8 @@ void SmartGhost::CambiaDir()
 			else if (posibl[j] == 1) { dirX = 0; dirY = 1; }
 			else if (posibl[j] == 2) { dirX = -1; dirY = 0; }
 			else if (posibl[j] == 3) { dirX = 0; dirY = -1; }
-			float numX = abs(gueim->PacManY() - (PosY+dirX));
-			float numY = abs(gueim->PacManX() - (PosX+dirY));
+			float numX = abs(play->PacY() - (PosY+dirX));
+			float numY = abs(play->PacX() - (PosX+dirY));
 			float distAux = sqrtf(powf(numX, 2) + powf(numY, 2));
 			if (distAux < distancia)
 			{

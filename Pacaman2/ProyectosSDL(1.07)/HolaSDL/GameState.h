@@ -7,12 +7,13 @@
 #include"GameObject.h"
 #include"Ghost.h"
 #include"SmartGhost.h"
+#include"PacMan.h"
 
 using namespace std;
 
 //class GameStateMachine;
 
-class GameState
+class GameState //: public GameObject
 {
 protected:
 
@@ -35,12 +36,20 @@ protected:
 
 	int Fils = 0,
 		Cols = 0;
+
+	int Nivel = 1;
+
+	int puntos = 0,
+		maxPunt = 0;
+
+	int ActComida = 0,
+		MaxComida = 0;
 public:
 	virtual void render();
-	GameState();
+	GameState(Game* game);
 	~GameState();
-	bool SetMap(string filename);
+	//bool SetMap(string filename);
 	virtual void Update();
-	virtual void HandleEvent();
+	virtual void HandleEvent(SDL_Event& e);
 };
 

@@ -7,7 +7,7 @@ class PauseState:public GameState
 private:
 	vector<Button*> pauseButtons;
 public:
-	PauseState();
+	PauseState(Game* game);
 	~PauseState();
 
 	static void Resume(Game* game);

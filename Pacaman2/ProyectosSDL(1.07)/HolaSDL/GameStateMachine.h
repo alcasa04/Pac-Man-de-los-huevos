@@ -21,5 +21,8 @@ public:
 	GameState* CurrentState();
 	void PushState(GameState* next);
 	void PopState();
+	bool empty() {
+		return gameStack.empty();
+	};
 };
 

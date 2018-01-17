@@ -2,8 +2,9 @@
 
 
 
-EndState::EndState():GameState()
+EndState::EndState(Game* game):GameState(game)
 {
+	gueim = game;
 }
 
 

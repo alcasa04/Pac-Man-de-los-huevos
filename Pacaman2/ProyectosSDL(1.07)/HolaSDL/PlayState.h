@@ -3,23 +3,22 @@
 
 class PlayState:public GameState
 {
-private:
-	int ActComida = 0,
-		MaxComida = 0;
-
-	int puntos = 0,
-		maxPunt = 0,
-		nivel = 1;
 public:
-	PlayState();
+	PlayState(Game* game);
+	PlayState(Game* game, int i);
 	~PlayState();
 	virtual void render();
 	virtual void Update();
-	virtual void HandleEvents(SDL_Event& e);
+	void HandleEvent(SDL_Event& e);
 	bool NextCell(int x, int y, int dir);
 	bool SaveToFile();
 	void FinJuego();
 	void Colision();
 	void CreaFantasma(int x, int y);
+	bool SetMap(string filename);
+	void GUI();
+
+	int PacX() { return pac->getPosX(); };
+	int PacY() { return pac->getPosY(); };
 };
 

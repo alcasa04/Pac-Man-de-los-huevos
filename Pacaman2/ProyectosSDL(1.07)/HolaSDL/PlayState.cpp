@@ -7,29 +7,91 @@
 #include"MenuState.h"
 
 //constructora y destructora
-PlayState::PlayState():GameState()
+PlayState::PlayState(Game* game):GameState(game)
 {
-
+	string level;
+	//aqui va el codigo que queremos ejecutar
+	if (Nivel < 10) {
+		level = "Level0" + to_string(Nivel) + ".dat";
+	}
+	else level = "Level" + to_string(Nivel) + ".dat";
+	//LoadTextures();
+	SetMap(level);
 }
 
 PlayState::~PlayState()
 {
 }
 
+PlayState::PlayState(Game* game, int i) :GameState(game)
+{
+	int aux = enemies.size();
+	for (int i = 0; i < aux; i++)
+		enemies.pop_back();
+
+	string entrada, code;
+	ifstream archivo;
+	cin >> entrada;
+	archivo.open("Save.txt");
+	archivo >> code;
+	if (entrada == code) {
+		archivo >> puntos >> ActComida >> MaxComida;
+		map = new GameMap(0, 0, gueim->getRender(),this);
+		if (!map->loadFromFile(archivo))gueim->error = true;
+
+		pac = new PacMan(0, 0, gueim->getRender(), gueim, this);
+		if (!pac->loadFromFile(archivo))gueim->error = true;
+		for (int i = 0; i < 4; i++) {
+			ghosts[i] = new Ghost(0, 0, gueim->getRender(), gueim, this);
+			if (!ghosts[i]->loadFromFile(archivo))gueim->error = true;
+		}
+		int numEnemies = 0;
+		archivo >> numEnemies;
+		for (int i = 0; i < numEnemies; i++) {
+			enemies.push_back(new SmartGhost(0, 0, gueim->getRender(), gueim, this));
+			if (!enemies[i]->loadFromFile(archivo))gueim->error = true;
+		}
+
+		/*int aux = 0;
+		archivo >> aux;
+		for (int i = 0; i < aux; i++) {
+			lista.push_back(new GameCharacter(0, 0, this));
+
+		}*/
+	}
+	archivo.close();
+}
+
 //metodos virtuales heredados
 void PlayState::Update() {
-	if (map->getTablero()[pac->getPosY()][pac->getPosX()] == Comida)
+	if (map->getTablero()[pac->getPosX()][pac->getPosY()] == Comida)
 	{
 		map->SetCell(pac->getPosX(), pac->getPosY(), Vacio);
-		//puntos++;
-		//ActComida++;
+		puntos++;
+		ActComida++;
 	}
-	else if (map->getTablero()[pac->getPosY()][pac->getPosX()] == Vitamina)
+	else if (map->getTablero()[pac->getPosX()][pac->getPosY()] == Vitamina)
 	{
 		pac->Come = true;
 		pac->RestartContador(0);
 		map->SetCell(pac->getPosX(), pac->getPosY(), Vacio);
 	}
+	pac->Mueve(Fils, Cols);
+	Colision();
+	for (int i = 0; i < 4; i++)
+	{
+		ghosts[i]->Mueve(Fils, Cols);
+	}
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		enemies[i]->Mueve(Fils, Cols);
+	}
+	Colision();
+	map->AnimVit();
+	pac->Contador();
+	FinJuego();
+	GUI();
+
 }
 
 void PlayState::render() {
@@ -52,17 +114,17 @@ void PlayState::render() {
 			destRec.x = (i * 20) + ((winWidth - 20 * Cols) / 2);
 			//asignamos en que columna se va a pintar
 
-			if (map->getTablero()[i][j] == Muro) {
+			if (map->getTablero()[j][i] == Muro) {
 				map->Renderizado(destRec, 0);
 			}
 			//si es un muro, renderizamos la imagen del muro
 
-			else if (map->getTablero()[i][j] == Comida) {
+			else if (map->getTablero()[j][i] == Comida) {
 				map->Renderizado(destRec, 1);
 			}
 			//analogo para la comida
 
-			else if (map->getTablero()[i][j] == Vitamina) {
+			else if (map->getTablero()[j][i] == Vitamina) {
 				map->Renderizado(destRec, 2);
 			}
 			//analogo para la vitamina
@@ -95,52 +157,38 @@ void PlayState::render() {
 	//pintamos la escena
 }
 
-void PlayState::HandleEvents(SDL_Event& e) {
+void PlayState::HandleEvent(SDL_Event& e) {
 	if (e.type == SDL_KEYDOWN) {
-		if (e.key.type == SDLK_ESCAPE) {
-			gueim->newState(new PauseState());
+		if (e.key.keysym.sym == SDLK_ESCAPE) {
+			gueim->newState(new PauseState(gueim));
 		}
 	}
 }
 
 //metodos propios
 bool PlayState::NextCell(int x, int y, int dir) {
-	//Si se sale de pantalla hace recursión de NextCell en la posición contraria
-	if (dir == 0 && x + 1 >= Cols)
-	{
-		if (NextCell(y, -1, 0))
-			return true;
+	int nx=x, ny=y;
+	if (dir == 0) {
+		ny++;
 	}
-	//Same
-	else if (dir == 2 && x - 1 < 0)
-	{
-		if (NextCell(y, Cols, 2))
-			return true;
-	}
-	//Same
-	else if (dir == 1 && y + 1 >= Fils)
-	{
-		if (NextCell(-1, x, 1))
-			return true;
-	}
-	//Same
-	else if (dir == 3 && y - 1 < 0)
-	{
-		if (NextCell(Fils, x, 3))
-			return true;
-	}
+	else if (dir == 2)
+		ny--;
+	else if (dir == 1)
+		nx++;
+	else nx--;
+
+	if (nx >= Fils)
+		nx = 0;
+	else if (nx < 0)
+		nx = Fils - 1;
+	else if (ny >= Cols)
+		ny = 0;
+	else if (ny < 0)
+		ny = Cols;
+
+	return map->getTablero()[nx][ny] != Muro;
 
 	
-	else if (dir == 0 && map->getTablero()[x + 1][y] == Muro)
-		return false;
-	else if (dir == 1 && map->getTablero()[x][y + 1] == Muro)
-		return false;
-	else if (dir == 2 && map->getTablero()[x - 1][y] == Muro)
-		return false;
-	else if (dir == 3 && map->getTablero()[x][y - 1] == Muro)
-		return false;
-	else return true;
-
 }
 
 bool PlayState::SaveToFile() {
@@ -176,13 +224,13 @@ bool PlayState::SaveToFile() {
 
 void PlayState::FinJuego() {
 	if (ActComida >= MaxComida) {
-		nivel++;
-		if (nivel < 10) {
-			string level = "level0" + to_string(nivel) + ".dat";
+		Nivel++;
+		if (Nivel < 10) {
+			string level = "level0" + to_string(Nivel) + ".dat";
 			SetMap(level);
 		}
 		else {
-			string level = "level"+to_string(nivel) + ".dat";
+			string level = "level"+to_string(Nivel) + ".dat";
 			SetMap(level);
 		}
 	}
@@ -201,7 +249,7 @@ void PlayState::Colision() {
 			}
 			else 
 			{
-				gueim->newState(new EndState());											//provisional, hay que pasarle new EndState o algo
+				gueim->newState(new EndState(gueim));											//provisional, hay que pasarle new EndState o algo
 			}
 		}
 	}
@@ -215,7 +263,7 @@ void PlayState::Colision() {
 				puntos += 15;
 			}
 			else {
-				gueim->newState(new EndState());											//provisional, hay que pasarle new EndState o algo
+				gueim->newState(new EndState(gueim));											//provisional, hay que pasarle new EndState o algo
 			}
 		}
 		//colision con otros fantasmas inteligente para reproduccion
@@ -250,6 +298,62 @@ void PlayState::CreaFantasma(int x, int y) {
 		else if (random == 1)x++;
 		else if (random == 2)y--;
 		else x--;
-		enemies.push_back(new SmartGhost(x, y, gueim->getRender(), gueim));		//cambiar de game a playstate en la constructora tambien
+		enemies.push_back(new SmartGhost(x, y, gueim->getRender(), gueim, this));		//cambiar de game a playstate en la constructora tambien
 	}
+}
+
+//Lee de archivo y crea un tablero con la información dada, igual que el antiguo de game
+bool PlayState::SetMap(string filename) {
+
+	int aux = 0;
+	//variable auxiliar para leer de archivo y asignar los distintos tipos de casillas
+
+	ifstream archivo;
+
+	archivo.open(filename);
+
+	if (!archivo.fail()) {
+		archivo >> Fils >> Cols;
+		map = new GameMap(Fils, Cols, gueim->getRender(), this);
+
+		for (int i = 0; i < Fils; i++) {
+			for (int j = 0; j < Cols; j++) {
+				//recorremos la matriz entera
+
+				archivo >> aux;
+				//leemos el siguiente numero del archivo
+
+
+				if (aux < 4)
+				{
+					map->SetCell(i, j, (MapCells)aux);
+					if (aux == 2) maxPunt++;
+				}
+				else if (aux <9) {
+					map->SetCell(i, j, Vacio);
+					ghosts[aux - 5] = new Ghost(i, j, gueim->getRender(), gueim, this);
+				}
+				else
+				{
+					map->SetCell(i, j, Vacio);
+					pac = new PacMan(i, j, gueim->getRender(), gueim, this);
+				}
+
+			}
+		}
+		MaxComida = maxPunt;
+	}
+	int auxi = enemies.size();
+	for (int i = 0; i < auxi; i++)
+		enemies.pop_back();
+	enemies.push_back(new SmartGhost(1, 1, gueim->getRender(), gueim,this));
+	enemies.push_back(new SmartGhost(1, 3, gueim->getRender(), gueim, this));
+	archivo.close();
+	pac->RestartContador(50);
+	return !archivo.fail();
+}
+
+void PlayState::GUI() {
+	system("cls");
+	cout << "puntos: " << puntos << endl;
 }

@@ -4,7 +4,7 @@
 class EndState:public GameState
 {
 public:
-	EndState();
+	EndState(Game* game);
 	~EndState();
 	virtual void Update();
 	virtual void HandleEvent();

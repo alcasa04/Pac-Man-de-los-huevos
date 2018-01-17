@@ -4,9 +4,10 @@
 #include"Game.h"
 
 
-GameMap::GameMap(int fils, int cols, SDL_Renderer* rend) : PacManObject()
+GameMap::GameMap(int fils, int cols, SDL_Renderer* rend, PlayState*plai)
 //constructora, le pasamos como parametros filas y columnas del mapa
 {
+	play = plai;
 	Fils = fils;
 	Cols = cols;
 	//asignamos variables
@@ -49,13 +50,13 @@ GameMap::~GameMap()
 //Destructora de GameMap
 
 MapCells GameMap::GetCell(int x, int y) {
-	return tablero[y][x];
+	return tablero[x][y];
 	//info de una celda determinada
 }
 //Devuelve qué tipo de casilla es la proporcionada por la X e Y
 
 void GameMap::SetCell(int x, int y, MapCells cell) {
-	tablero[y][x] = cell;
+	tablero[x][y] = cell;
 	//cambiamos una casilla a la que le pasemos
 }
 //Cambia el tipo de casilla
@@ -68,7 +69,7 @@ void GameMap::Renderizado(SDL_Rect destRec, int tipo)
 		textura[1]->Render(destRec, rendering);
 	else if (tipo == 2)
 	{
-			textura[2]->RenderFrame(animVit, 0, destRec, rendering);
+		textura[2]->RenderFrame(animVit, 0, destRec, rendering);
 	}
 
 }
