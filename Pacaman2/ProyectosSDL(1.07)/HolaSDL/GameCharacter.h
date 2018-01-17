@@ -1,9 +1,9 @@
 #pragma once
-#include"GameObject.h"
+#include"PacManObject.h"
 
 using namespace std;
 
-class GameCharacter : public GameObject
+class GameCharacter : public PacManObject
 {
 public:
 	GameCharacter(int x, int y, Game* game);

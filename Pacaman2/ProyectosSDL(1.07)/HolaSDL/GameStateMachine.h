@@ -5,11 +5,11 @@
 using namespace std;
 
 class GameState;
-class Game;
+/*class Game;
 class GameMap;
 class PacMan;
 class Ghost;
-class SmartGhost;
+class SmartGhost;*/
 
 class GameStateMachine
 {
@@ -18,6 +18,8 @@ private:
 public:
 	GameStateMachine();
 	~GameStateMachine();
-	//void PushState(GameState newstate);
+	GameState* CurrentState();
+	void PushState(GameState* next);
+	void PopState();
 };
 

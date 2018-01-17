@@ -18,5 +18,8 @@ public:
 	virtual void HandleEvents(SDL_Event& e);
 	bool NextCell(int x, int y, int dir);
 	bool SaveToFile();
+	void FinJuego();
+	void Colision();
+	void CreaFantasma(int x, int y);
 };
 

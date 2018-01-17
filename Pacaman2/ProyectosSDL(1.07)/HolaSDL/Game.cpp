@@ -3,6 +3,7 @@
 #include"GameMap.h"
 #include"Ghost.h"
 #include "SmartGhost.h"
+#include"GameStateMachine.h"
 
 //Constructora de Game
 Game::Game()
@@ -174,7 +175,6 @@ void Game::Update()
 //Comprueba si tu puntuación es igual a la puntuación máxima
 void Game::finJuego()
 {
-
 	if (ActComida >= maxComida)
 	{
 		Nivel++;
@@ -525,6 +525,7 @@ bool Game::LoadFromFile() {
 	archivo.close();
 	return !archivo.fail();
 }
+
 int Game::getFils()
 {
 	return Fils;
@@ -580,4 +581,8 @@ void Game::CargaEvents()
 	}
 	*/
 
+}
+
+void Game::newState(GameState* newSt) {
+	stateMachine->PushState(newSt);
 }

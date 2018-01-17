@@ -4,7 +4,7 @@
 #include"Game.h"
 
 
-GameMap::GameMap(int fils, int cols, SDL_Renderer* rend) : GameObject()
+GameMap::GameMap(int fils, int cols, SDL_Renderer* rend) : PacManObject()
 //constructora, le pasamos como parametros filas y columnas del mapa
 {
 	Fils = fils;

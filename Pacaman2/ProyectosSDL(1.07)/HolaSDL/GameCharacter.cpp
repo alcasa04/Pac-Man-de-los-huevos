@@ -2,7 +2,7 @@
 
 
 
-GameCharacter::GameCharacter(int posx, int posy, Game* game) : GameObject()
+GameCharacter::GameCharacter(int posx, int posy, Game* game) //: PacManObject()
 {
 	PosX = posx;
 	PosY = posy;

@@ -6,7 +6,7 @@
 #include <vector>
 #include "SDL.h"
 #include "SDL_image.h"
-#include "GameObject.h"
+#include "PacManObject.h"
 
 using namespace std;
 
@@ -22,7 +22,7 @@ enum MapCells
 };
 //enumerable indicando todas las casillas disponibles en el juego
 
-class GameMap : public GameObject
+class GameMap : public PacManObject
 {
 	friend class GameState;
 	friend class Game;

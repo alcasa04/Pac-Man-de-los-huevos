@@ -1,19 +1,24 @@
 #include "GameStateMachine.h"
 
-
-
 GameStateMachine::GameStateMachine()
 {
-}
 
+}
 
 GameStateMachine::~GameStateMachine()
 {
+
 }
 
-/*void GameStateMachine::PushState(GameState newstate) {
-	gameStack.push(newstate);
-}*/
+GameState* GameStateMachine::CurrentState() { return gameStack.top(); }
+
+void GameStateMachine::PushState(GameState* next) { gameStack.push(next); }
+
+void GameStateMachine::PopState() {
+	GameState* aux = gameStack.top();
+	gameStack.pop();
+	delete aux;
+}
 
 /*
 calss playstate: gamestate{

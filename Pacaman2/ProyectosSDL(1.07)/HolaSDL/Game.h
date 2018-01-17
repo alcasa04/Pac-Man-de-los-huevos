@@ -13,6 +13,7 @@ class PacMan;
 class Ghost;
 class GameMap;
 class SmartGhost;
+class GameState;
 
 using namespace std;
 
@@ -45,9 +46,9 @@ private:
 	bool carga = false;
 	//si es nueva partida o carga de partida guardada
 	int estadoMenu = 1;
+
 	//vector de enemigos
 	vector<SmartGhost*> enemies;
-
 
 	//vector de punteros a texturas
 	vector<Texture*>texturas;
@@ -105,10 +106,9 @@ public:
 	void GUI();
 
 	void run();
-	
 	void Renderizado();
-	
 	void handleEvents();
+
 	bool NextCell(int x, int y, int dir);
 	void Update();
 	void Colision();
@@ -129,5 +129,7 @@ public:
 	SDL_Renderer* getRender() { return render; }
 	SDL_Window* getWindow() { return window; }
 	GameStateMachine* getMachine() { return stateMachine; };
+	bool getExit() { return exit; };
+	void newState(GameState* newSt);
 };
 
