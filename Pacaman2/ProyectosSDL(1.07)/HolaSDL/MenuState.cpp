@@ -14,13 +14,13 @@ MenuState::MenuState(Game* game):GameState(game)
 	auxRect.h = 50;
 
 	auxRect.y = winHeight / 2 - 100;
-	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, GoToPlay, "..\\images\\azul.png"));
+	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, GoToPlay, "..\\images\\start.png"));
 
 	auxRect.y += 100;
-	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, LoadGame, "..\\images\\verde.png"));
+	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, LoadGame, "..\\images\\load.png"));
 
 	auxRect.y += 100;
-	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, Exit, "..\\images\\rojo.png"));
+	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, Exit, "..\\images\\exit.png"));
 
 	text = new Texture();
 	if (!text->loadText("..\\images\\Pac-Titulo.png", 1, 2, gueim->getRender()))gueim->error = true;

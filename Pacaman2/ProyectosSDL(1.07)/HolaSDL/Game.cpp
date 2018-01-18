@@ -9,6 +9,7 @@
 #include"PlayState.h"
 #include"EndState.h"
 #include"PauseState.h"
+#include"SDLError.h"
 //Constructora de Game
 Game::Game()
 {
@@ -17,15 +18,21 @@ Game::Game()
 	//inicializacion normal de la SDL
 	//visto en los slides de clase
 	int winX, winY;
-	winX = winY = SDL_WINDOWPOS_CENTERED;
-	SDL_Init(SDL_INIT_EVERYTHING);
-	window = SDL_CreateWindow("First text with SDL", winX, winY, WinWidth, WinHeight, SDL_WINDOW_SHOWN);
-	render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	if (window == nullptr || render == nullptr)
-		cout << "Error initializing SDL" << endl;
+	try
+	{
+		winX = winY = SDL_WINDOWPOS_CENTERED;
+		if (winX == NULL || winY == NULL)
+		{
+			throw SDLError("Error checking center of SDL window");
+		}
+		SDL_Init(SDL_INIT_EVERYTHING);
+		window = SDL_CreateWindow("First text with SDL", winX, winY, WinWidth, WinHeight, SDL_WINDOW_SHOWN);
+		render = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+		if (window == nullptr || render == nullptr)
+			cout << "Error initializing SDL" << endl;
 
 
-	else {
+		else {
 			string level;
 			//aqui va el codigo que queremos ejecutar
 			if (Nivel < 10) {
@@ -35,6 +42,11 @@ Game::Game()
 			LoadTextures();
 			//SetMap(level);
 		}
+	}
+	catch (exception& e)
+	{
+		cout << e.what() << '\n';
+	}
 }
 
 //Lee de archivo y crea un tablero con la información dada

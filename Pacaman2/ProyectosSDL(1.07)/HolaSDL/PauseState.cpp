@@ -12,13 +12,13 @@ PauseState::PauseState(Game* game):GameState(game)
 	auxRect.w = 100;
 
 	auxRect.y = winHeight / 2 - 100;
-	pauseButtons.push_back(new Button(auxRect, new Texture(), gueim, Resume, "..\\images\\azul.png"));
+	pauseButtons.push_back(new Button(auxRect, new Texture(), gueim, Resume, "..\\images\\resume.png"));
 
 	auxRect.y += 100;
-	pauseButtons.push_back(new Button(auxRect, new Texture(), gueim, Save, "..\\images\\verde.png"));
+	pauseButtons.push_back(new Button(auxRect, new Texture(), gueim, Save, "..\\images\\save.png"));
 
 	auxRect.y += 100;
-	pauseButtons.push_back(new Button(auxRect, new Texture(), gueim, GoToMenu, "..\\images\\rojo.png"));
+	pauseButtons.push_back(new Button(auxRect, new Texture(), gueim, GoToMenu, "..\\images\\goToMenu.png"));
 }
 
 
