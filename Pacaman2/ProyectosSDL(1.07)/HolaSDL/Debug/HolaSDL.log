@@ -1,2 +1,9 @@
-﻿  Game.cpp
+﻿  PlayState.cpp
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\playstate.cpp(39): warning C4390: ';': se encontró una instrucción controlada vacía; ¿es esa la intención?
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\playstate.cpp(101): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\playstate.cpp(165): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\playstate.cpp(244): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\playstate.cpp(290): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\playstate.cpp(303): warning C4018: '<': no coinciden signed/unsigned
+c:\users\hecto\universidad\2º\tpv\pacamandef\pac-man-de-los-huevos\pacaman2\proyectossdl(1.07)\holasdl\playstate.cpp(319): warning C4101: 'dir': variable local sin referencia
   HolaSDL.vcxproj -> C:\Users\hecto\UNIVERSIDAD\2º\TPV\PacamanDef\Pac-Man-de-los-huevos\Pacaman2\ProyectosSDL(1.07)\bin\HolaSDLDebug.exe

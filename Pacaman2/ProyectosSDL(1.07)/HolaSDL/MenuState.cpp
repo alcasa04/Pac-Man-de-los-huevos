@@ -21,6 +21,13 @@ MenuState::MenuState(Game* game):GameState(game)
 
 	auxRect.y += 100;
 	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, Exit, "..\\images\\rojo.png"));
+
+	text = new Texture();
+	if (!text->loadText("..\\images\\Pac-Titulo.png", 1, 2, gueim->getRender()))gueim->error = true;
+	destRec.y = 0;
+	destRec.x = winWidth / 3;
+	destRec.w = winWidth / 3;
+	destRec.h = winHeight;
 }
 
 
@@ -45,6 +52,9 @@ void MenuState::LoadGame(Game* game) {
 }
 
 void MenuState::render() {
+	SDL_RenderClear(gueim->getRender());
+	//text->Render(1, 1, destRec, gueim->getRender());
+	text->RenderFrame(0,0,destRec, gueim->getRender());
 	for (int i = 0; i < MenuButtons.size(); i++)
 		MenuButtons[i]->Render();
 	SDL_RenderPresent(gueim->getRender());

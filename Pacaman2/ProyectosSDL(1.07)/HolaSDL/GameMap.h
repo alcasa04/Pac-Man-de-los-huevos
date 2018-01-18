@@ -68,5 +68,8 @@ public:
 	virtual bool saveToFile(ofstream& archivo);
 
 	MapCells** getTablero() { return tablero; };
+
+	int getFils() { return Fils; };
+	int getCOls() { return Cols; };
 };
 

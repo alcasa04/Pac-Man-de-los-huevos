@@ -6,6 +6,8 @@
 #include"EndState.h"
 #include"MenuState.h"
 
+#include"FileFormatError.h"
+
 //constructora y destructora
 PlayState::PlayState(Game* game):GameState(game)
 {
@@ -23,43 +25,57 @@ PlayState::~PlayState()
 {
 }
 
-PlayState::PlayState(Game* game, int i) :GameState(game)
+PlayState::PlayState(Game* game, int qwert) :GameState(game)
 {
-	int aux = enemies.size();
-	for (int i = 0; i < aux; i++)
-		enemies.pop_back();
+		int aux = enemies.size();
+		for (int i = 0; i < aux; i++)
+			enemies.pop_back();
 
-	string entrada, code;
-	ifstream archivo;
-	cin >> entrada;
-	archivo.open("Save.txt");
-	archivo >> code;
-	if (entrada == code) {
-		archivo >> puntos >> ActComida >> MaxComida;
-		map = new GameMap(0, 0, gueim->getRender(),this);
-		if (!map->loadFromFile(archivo))gueim->error = true;
-
-		pac = new PacMan(0, 0, gueim->getRender(), gueim, this);
-		if (!pac->loadFromFile(archivo))gueim->error = true;
-		for (int i = 0; i < 4; i++) {
-			ghosts[i] = new Ghost(0, 0, gueim->getRender(), gueim, this);
-			if (!ghosts[i]->loadFromFile(archivo))gueim->error = true;
+		string entrada, code;
+		ifstream archivo;
+	try{
+		cin >> entrada;
+		archivo.open("Save.txt");
+		if (true);
+		archivo >> code;
+		if (code == "") {
+			throw FileFormatError("There wasnt any game saved, so it's impossible to load any game");
 		}
-		int numEnemies = 0;
-		archivo >> numEnemies;
-		for (int i = 0; i < numEnemies; i++) {
-			enemies.push_back(new SmartGhost(0, 0, gueim->getRender(), gueim, this));
-			if (!enemies[i]->loadFromFile(archivo))gueim->error = true;
+		if (entrada == code) {
+			archivo >> puntos >> ActComida >> MaxComida;
+			map = new GameMap(0, 0, gueim->getRender(), this);
+			if (!map->loadFromFile(archivo))gueim->error = true;
+			Fils = map->getFils();
+			Cols = map->getCOls();
+
+			pac = new PacMan(0, 0, gueim->getRender(), gueim, this);
+			if (!pac->loadFromFile(archivo))gueim->error = true;
+			for (int i = 0; i < 4; i++) {
+				ghosts[i] = new Ghost(0, 0, gueim->getRender(), gueim, this);
+				if (!ghosts[i]->loadFromFile(archivo))gueim->error = true;
+			}
+			int numEnemies = 0;
+			archivo >> numEnemies;
+			for (int i = 0; i < numEnemies; i++) {
+				enemies.push_back(new SmartGhost(0, 0, gueim->getRender(), gueim, this));
+				if (!enemies[i]->loadFromFile(archivo))gueim->error = true;
+			}
+
+			/*int aux = 0;
+			archivo >> aux;
+			for (int i = 0; i < aux; i++) {
+				lista.push_back(new GameCharacter(0, 0, this));
+
+			}*/
 		}
-
-		/*int aux = 0;
-		archivo >> aux;
-		for (int i = 0; i < aux; i++) {
-			lista.push_back(new GameCharacter(0, 0, this));
-
-		}*/
+		archivo.close();
 	}
-	archivo.close();
+	catch(exception &e) {
+		archivo.close();
+		cout << e.what() << '\n';
+		gueim->getMachine()->PopState();
+		gueim->getMachine()->PushState(new PlayState(gueim));
+	}
 }
 
 //metodos virtuales heredados
@@ -162,7 +178,23 @@ void PlayState::HandleEvent(SDL_Event& e) {
 		if (e.key.keysym.sym == SDLK_ESCAPE) {
 			gueim->newState(new PauseState(gueim));
 		}
-	}
+		else if (e.key.keysym.sym == SDLK_UP)
+				{
+					pac->CambiaDir(3);
+				}
+		else if (e.key.keysym.sym == SDLK_LEFT)
+				{
+					pac->CambiaDir(2);
+				}
+		else if (e.key.keysym.sym == SDLK_DOWN)
+				{
+					pac->CambiaDir(1);
+				}
+		else if (e.key.keysym.sym == SDLK_RIGHT)
+				{
+					pac->CambiaDir(0);
+				}
+		}
 }
 
 //metodos propios
@@ -200,6 +232,7 @@ bool PlayState::SaveToFile() {
 	ofstream archivo;
 	archivo.open("Save.txt");
 	archivo << entrada << endl;
+	archivo << puntos << " " << ActComida <<" "<< MaxComida<< endl;
 	//archivo << puntos << " " << ActComida << " " << maxComida << endl;
 	if (!map->saveToFile(archivo))gueim->error = true;
 	if (!pac->saveToFile(archivo))gueim->error = true;

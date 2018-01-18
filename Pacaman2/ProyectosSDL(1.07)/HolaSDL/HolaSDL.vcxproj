@@ -70,6 +70,7 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="EndState.cpp" />
+    <ClCompile Include="FileFormatError.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCharacter.cpp" />
     <ClCompile Include="GameMap.cpp" />
@@ -91,6 +92,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="EndState.h" />
+    <ClInclude Include="FileFormatError.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCharacter.h" />
     <ClInclude Include="GameMap.h" />

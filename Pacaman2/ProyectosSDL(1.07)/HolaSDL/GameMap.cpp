@@ -83,8 +83,7 @@ void GameMap::AnimVit()
 
 bool GameMap::loadFromFile(ifstream& archivo) {
 	int aux = 0;
-
-	archivo >> Cols >> Fils;
+	archivo >> Fils >> Cols;
 	tablero = new MapCells*[Fils];
 	for (int i = 0; i < Fils; i++) {
 		tablero[i] = new MapCells[Cols];
@@ -102,8 +101,8 @@ void GameMap::update() {};
 
 bool GameMap::saveToFile(ofstream& archivo) {
 	archivo << Fils << " " << Cols<<endl;
-	for (int i = 0; i < Cols; i++) {
-		for (int j = 0; j < Fils; j++) {
+	for (int i = 0; i < Fils; i++) {
+		for (int j = 0; j < Cols; j++) {
 			archivo << tablero[i][j];
 			if (j != Cols)
 				archivo << " ";

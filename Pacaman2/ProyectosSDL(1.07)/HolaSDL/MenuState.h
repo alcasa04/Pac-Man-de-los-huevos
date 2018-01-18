@@ -6,6 +6,7 @@ class MenuState:public GameState
 {
 private:
 	vector<Button*> MenuButtons;
+	Texture* text;
 public:
 	MenuState(Game* game);
 	~MenuState();

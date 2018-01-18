@@ -267,7 +267,7 @@ void Game::run()
 	while (!exit && !stateMachine->empty()) {
 		//if (!pausa)
 		//{
-		SDL_Delay(75);
+		SDL_Delay(50);
 		//stateMachine->CurrentState()->HandleEvent();
 		Update();
 		stateMachine->CurrentState()->render();

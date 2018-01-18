@@ -1,4 +1,5 @@
 #include "PauseState.h"
+#include "PlayState.h"
 
 #include"GameStateMachine.h"
 
@@ -38,7 +39,11 @@ void PauseState::Resume(Game* game) {
 
 void PauseState::Save(Game* game) {
 	//game->SaveToFile();
-	for (int i = 0; i < 3; i++)
+	/*for (int i = 0; i < 3; i++)
+		game->getMachine()->PopState();*/
+	game->getMachine()->PopState();
+	static_cast<PlayState*> (game->getMachine()->CurrentState())->SaveToFile();
+	for (int i = 0; i < 2; i++)
 		game->getMachine()->PopState();
 }
 

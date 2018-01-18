@@ -10,6 +10,5 @@ public:
 	PacManError(string error);
 	~PacManError();
 	virtual void what();
-	
 };
 
