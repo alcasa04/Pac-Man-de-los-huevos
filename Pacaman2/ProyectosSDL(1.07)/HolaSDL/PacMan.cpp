@@ -239,7 +239,11 @@ bool PacMan::saveToFile(ofstream& archivo)
 bool PacMan::loadFromFile(ifstream& archivo)
 {
 	archivo >> IniX >> IniY;
+	if (IniX < 0 || IniY <0)
+		return false;
 	archivo >> PosX >> PosY;
+	if (PosX < 0 || PosY < 0)
+		return false;
 	archivo >> contador;
 
 	return !archivo.fail();

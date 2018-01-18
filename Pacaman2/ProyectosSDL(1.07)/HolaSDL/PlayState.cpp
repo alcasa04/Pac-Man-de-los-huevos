@@ -36,29 +36,38 @@ PlayState::PlayState(Game* game, int qwert) :GameState(game)
 	try{
 		cin >> entrada;
 		archivo.open("Save.txt");
-		if (true);
+		if (archivo.fail()) {
+			throw FileFormatError("Couldnt find any saved game, going back to menu");
+		}
 		archivo >> code;
 		if (code == "") {
 			throw FileFormatError("There wasnt any game saved, so it's impossible to load any game");
 		}
 		if (entrada == code) {
 			archivo >> puntos >> ActComida >> MaxComida;
+			if (MaxComida < ActComida || MaxComida < 0) {
+				throw FileFormatError("Error reading data from save file, posible negative number");
+			}
 			map = new GameMap(0, 0, gueim->getRender(), this);
-			if (!map->loadFromFile(archivo))gueim->error = true;
+			if (!map->loadFromFile(archivo))
+				throw FileFormatError("Error while reading the data from the map");
 			Fils = map->getFils();
 			Cols = map->getCOls();
 
 			pac = new PacMan(0, 0, gueim->getRender(), gueim, this);
-			if (!pac->loadFromFile(archivo))gueim->error = true;
+			if (!pac->loadFromFile(archivo))
+				throw FileFormatError("Error while reading the data from the pacman");
 			for (int i = 0; i < 4; i++) {
 				ghosts[i] = new Ghost(0, 0, gueim->getRender(), gueim, this);
-				if (!ghosts[i]->loadFromFile(archivo))gueim->error = true;
+				if (!ghosts[i]->loadFromFile(archivo))
+					throw FileFormatError("Error while reading the data from common ghosts");
 			}
 			int numEnemies = 0;
 			archivo >> numEnemies;
 			for (int i = 0; i < numEnemies; i++) {
 				enemies.push_back(new SmartGhost(0, 0, gueim->getRender(), gueim, this));
-				if (!enemies[i]->loadFromFile(archivo))gueim->error = true;
+				if (!enemies[i]->loadFromFile(archivo))
+					throw FileFormatError("Error while reading the data from smartghosts");
 			}
 
 			/*int aux = 0;
@@ -74,7 +83,7 @@ PlayState::PlayState(Game* game, int qwert) :GameState(game)
 		archivo.close();
 		cout << e.what() << '\n';
 		gueim->getMachine()->PopState();
-		gueim->getMachine()->PushState(new PlayState(gueim));
+		//gueim->getMachine()->PushState(new PlayState(gueim));
 	}
 }
 

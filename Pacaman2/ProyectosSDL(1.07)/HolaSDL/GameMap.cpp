@@ -84,11 +84,15 @@ void GameMap::AnimVit()
 bool GameMap::loadFromFile(ifstream& archivo) {
 	int aux = 0;
 	archivo >> Fils >> Cols;
+	if (Fils <= 0 || Cols <= 0)
+		return false;
 	tablero = new MapCells*[Fils];
 	for (int i = 0; i < Fils; i++) {
 		tablero[i] = new MapCells[Cols];
 		for (int j = 0; j < Cols; j++) {
 			archivo >> aux;
+			if (aux < 0 || aux >5)
+				return false;
 			tablero[i][j] = (MapCells)aux;
 		}
 	}

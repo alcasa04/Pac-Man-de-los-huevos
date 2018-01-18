@@ -131,7 +131,11 @@ void Ghost::update() {
 
 bool Ghost::loadFromFile(ifstream& archivo) {
 	archivo >> IniX >> IniY;
+	if (IniX < 0 || IniY < 0)
+		return false;
 	archivo >> PosX >> PosY;
+	if (IniX < 0 || IniY < 0)
+		return false;
 
 	return !archivo.fail();
 }

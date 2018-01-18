@@ -194,8 +194,14 @@ bool SmartGhost::loadFromFile(ifstream& archivo) {
 
 bool SmartGhost::saveToFile(ofstream& archivo) {
 	archivo << IniX << " " << IniY << endl;
+	if (IniX < 0 || IniY < 0)
+		return false;
 	archivo << PosX << " " << PosY << endl;
+	if (PosX < 0 || PosY < 0)
+		return false;
 	archivo << edad << endl;
+	if (edad < 0)
+		return false;
 
 	return !archivo.fail();
 }
