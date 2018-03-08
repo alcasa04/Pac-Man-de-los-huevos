@@ -1,8 +1,15 @@
 #pragma once
 #include"GameState.h"
+#include "PacMan.h"
+#include "Ghost.h"
+#include "SmartGhost.h"
 
 class PlayState:public GameState
 {
+private:
+	PacMan* pac;
+	vector<Ghost*> ghosts;
+	vector<SmartGhost*> enemies;
 public:
 	PlayState(Game* game);
 	PlayState(Game* game, int i);

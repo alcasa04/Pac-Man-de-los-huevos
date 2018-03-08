@@ -7,7 +7,9 @@ class Ghost : public GameCharacter
 {
 private:
 	
-	//PacMan* pacman = nullptr;
+	PacMan* pac = nullptr;
+	int d;
+	SDL_Rect rect;
 
 	//Texture* textGhost = new Texture();
 
@@ -33,19 +35,19 @@ public:
 	Ghost();
 	//constructora default, situa fantasma en (0,0)
 
-	Ghost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* play);
+	Ghost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* play, PacMan* pacman, int fantasma);
 	//constructora que situa al fantasma en posicion (x,y)
 
 	~Ghost();
 	//destructora
 
-	void RenderGhost(SDL_Rect rekt, int d, PacMan* pacman);
+	void RenderGhost(int d, PacMan* pacman);
 
 	int getPosX();
 	int getPosY();
 	//metodos auxiliares
 	int GetAnim();
-	void Mueve(int fils, int cols);
+	virtual void Mueve(int fils, int cols);
 	void CambiaDir();
 	void SetInicio();
 	

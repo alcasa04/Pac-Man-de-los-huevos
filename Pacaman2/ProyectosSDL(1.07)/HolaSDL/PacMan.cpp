@@ -8,11 +8,6 @@ PacMan::PacMan() : GameCharacter(0,0, nullptr){
 	PosX = PosY = IniX = IniY = 0;
 	//si no le pasamos parametros, asumiremos que PacMan esta en la posicion (0,0)
 }
-/*PacMan::PacMan(int x, int y,SDL_Renderer* rend, Game* game) : GameCharacter::GameCharacter(x, y, game) {
-	PosX = x;
-	PosY = y;
-}
-*/
 //Constructora predeterminada
 PacMan::PacMan(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : GameCharacter(x, y, game){
 	play = plai;
@@ -22,6 +17,7 @@ PacMan::PacMan(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : 
 	render = rend;
 	if (!text->loadText(("..\\images\\characters1.png"), 4, 14, render)) gueim->error = true;
 	//le pasamos como parametros una x y una y, y situamos un PacMan en la posicion dada
+	rect.w = rect.h = 20;
 }
 //Constructora que coloca al Pac-Man
 
@@ -157,7 +153,7 @@ void PacMan::Mueve(int fils, int cols)
 		//cout << PosX << " " << PosY << endl;
 	}
 
-	
+	play->Colision();
 }
 //Mueve a Pac-Man en la nueva dirección proporcionada, o en la dirección anterior en su defecto
 
@@ -200,9 +196,11 @@ void PacMan::RestartContador(int n)
 }
 //Devuelve el contador a 0
 
-void PacMan::RenderPac(SDL_Rect recta)
+void PacMan::RenderPac()
 {
 	//throw new PacManError("Error initializing the game");
+	rect.x = (PosY+6) * 20;
+	rect.y = (PosX+1)*20;
 	int f = 0;
 	bool acaba = false;
 	while (f< 4 && !acaba)
@@ -212,13 +210,13 @@ void PacMan::RenderPac(SDL_Rect recta)
 			if (estado == f * 2)
 			{
 				CambiaEstado(f * 2 + 1);
-				text->RenderFrame(10, f, recta, render);
+				text->RenderFrame(10, f, rect, render);
 				acaba = true;
 			}
 			else
 			{
 				CambiaEstado(f * 2);
-				text->RenderFrame(11, f, recta, render);
+				text->RenderFrame(11, f, rect, render);
 			}
 		}
 		f++;
@@ -227,7 +225,9 @@ void PacMan::RenderPac(SDL_Rect recta)
 //Pinta a Pac-Man y a sus respectivas animaciones
 
 void PacMan::Update() {  }
-void PacMan::Render() {}
+void PacMan::Render() {
+	RenderPac();
+}
 bool PacMan::saveToFile(ofstream& archivo)
 {
 	archivo << IniX << " " << IniY << endl;

@@ -9,7 +9,7 @@ Ghost::Ghost() : GameCharacter(0,0, nullptr){
 }
 //constructora default que deja el fantasma en la posicion (0,0)
 
-Ghost::Ghost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : GameCharacter(x, y, game)
+Ghost::Ghost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai, PacMan* pacman, int fantasma) : GameCharacter(x, y, game)
 {
 	play = plai;
 	PosX = IniX = x;
@@ -17,6 +17,9 @@ Ghost::Ghost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : Ga
 	dir = 0;
 	render = rend;
 	if (!text->loadText(("..\\images\\characters1.png"), 4, 14, render)) gueim->error = true;
+	rect.w = rect.h = 20;
+	pac = pacman;
+	d = fantasma;
 }
 //Constructora que situa al fantasma en una posicion dada
 
@@ -104,25 +107,26 @@ void Ghost::SetInicio(){
 }
 //Devuelve al fantasma a su posicion inicial
 
-void Ghost::RenderGhost(SDL_Rect rekt, int d, PacMan* pacman)
+void Ghost::RenderGhost(int d, PacMan* pacman)
 {
-	
+	rect.x = (PosY+6) * 20;
+	rect.y = (PosX+1) * 20;
 	if (pacman->Come)
 	{
-		text->RenderFrame(12, 0, rekt, render);
+		text->RenderFrame(12, 0, rect, render);
 	}
 	else
 	{
 		if (GetAnim() == 0)
-			text->RenderFrame(d * 2, 0, rekt, render);
+			text->RenderFrame(d * 2, 0, rect, render);
 		else
-			text->RenderFrame(d * 2 + 1, 0, rekt, render);
+			text->RenderFrame(d * 2 + 0, 0, rect, render);
 	}
 }
 //Pinta al fantasma y lo anima en sus distintos casos
 
 void Ghost::Render() {
-
+	RenderGhost(d, pac);
 }
 
 void Ghost::update() {

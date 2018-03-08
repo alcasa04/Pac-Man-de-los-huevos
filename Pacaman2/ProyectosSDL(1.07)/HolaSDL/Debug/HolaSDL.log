@@ -1,1 +1,10 @@
-﻿LINK : fatal error LNK1104: no se puede abrir el archivo 'C:\Users\pekev\OneDrive\Documentos\GitHub\PacaMan\Pacaman2\ProyectosSDL(1.07)\bin\HolaSDLDebug.exe'
+﻿  SmartGhost.cpp
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(83): warning C4018: '<': no coinciden signed/unsigned
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(91): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(92): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(72): warning C4101: 'auxMax': variable local sin referencia
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(159): warning C4244: '+=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(160): warning C4244: '+=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(161): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\pekev\onedrive\documentos\github\pacaman\pacaman2\proyectossdl(1.07)\holasdl\smartghost.cpp(162): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+  HolaSDL.vcxproj -> C:\Users\pekev\OneDrive\Documentos\GitHub\PacaMan\Pacaman2\ProyectosSDL(1.07)\bin\HolaSDLDebug.exe

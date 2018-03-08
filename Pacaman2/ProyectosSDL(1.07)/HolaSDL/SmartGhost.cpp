@@ -10,8 +10,9 @@ SmartGhost::SmartGhost() : GameCharacter(0, 0, nullptr) {
 }
 //constructora default que deja el fantasma en la posicion (0,0)
 
-SmartGhost::SmartGhost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai) : GameCharacter(x, y, game)
+SmartGhost::SmartGhost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* plai, PacMan* pac) : GameCharacter(x, y, game)
 {
+	pacman = pac;
 	play = plai;
 	PosX = IniX = x;
 	PosY = IniY = y;
@@ -148,13 +149,15 @@ void SmartGhost::SetInicio() {
 }
 //Devuelve al fantasma a su posicion inicial
 
-void SmartGhost::RenderGhost(SDL_Rect rekt, PacMan* pacman)
+void SmartGhost::RenderGhost()
 {
+	rekt.x = (PosY + 6) * 20;
+	rekt.y = (PosX + 1) * 20;
 	
 	if (edad <= 20)
 	{
 		rekt.x += rekt.w / 2 -edad / 2;
-		rekt.y += rekt.w / 2 - edad / 2;
+		rekt.y += rekt.w / 2 -edad / 2;
 		rekt.w = edad;
 		rekt.h = edad;
 	}
@@ -174,7 +177,7 @@ void SmartGhost::RenderGhost(SDL_Rect rekt, PacMan* pacman)
 //Pinta al fantasma y lo anima en sus distintos casos
 
 void SmartGhost::Render() {
-
+	RenderGhost();
 }
 
 void SmartGhost::update() 

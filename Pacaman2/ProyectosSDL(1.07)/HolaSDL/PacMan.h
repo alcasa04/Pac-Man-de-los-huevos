@@ -22,7 +22,7 @@ class PacMan: public GameCharacter
 private:
 
 	//Texture* textPac = new Texture();
-
+	SDL_Rect rect;
 	//SDL_Renderer* render = nullptr;
 
 	int auxDir=0;
@@ -54,10 +54,10 @@ public:
 	//destructora
 	bool Come = false;
 	void RestartContador(int n);
-	void Mueve(int fils, int cols);
+	virtual void Mueve(int fils, int cols);
 	void CambiaDir(int newdir);
 
-	void RenderPac(SDL_Rect rekt);
+	void RenderPac();
 	int getPosX();
 	int getPosY();
 	estadoPacMan getEstado();

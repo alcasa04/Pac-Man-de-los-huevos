@@ -11,7 +11,7 @@ int main(int argc, char* argv[]){
 		Game* game = new Game();
 		game->run();
 		SDL_Quit();
-		game->~Game();
+		delete game;
 	}
 	catch(int e)
 	{

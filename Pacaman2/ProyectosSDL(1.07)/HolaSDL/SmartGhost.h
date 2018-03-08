@@ -14,7 +14,8 @@ private:
 	bool padre = false;
 	bool muerto = false;
 
-	//Game* game = nullptr;
+	PacMan* pacman;
+	SDL_Rect rekt;
 
 
 	/*
@@ -31,13 +32,13 @@ public:
 	SmartGhost();
 	//constructora default, situa fantasma en (0,0)
 
-	SmartGhost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* play);
+	SmartGhost(int x, int y, SDL_Renderer* rend, Game* game, PlayState* play, PacMan* pac);
 	//constructora que situa al fantasma en posicion (x,y)
 
 	~SmartGhost();
 	//destructora
 
-	void RenderGhost(SDL_Rect rekt, PacMan* pacman);
+	void RenderGhost();
 
 	int getPosX();
 	int getPosY();

@@ -27,9 +27,6 @@ PlayState::~PlayState()
 
 PlayState::PlayState(Game* game, int qwert) :GameState(game)
 {
-		int aux = enemies.size();
-		for (int i = 0; i < aux; i++)
-			enemies.pop_back();
 
 		string entrada, code;
 		ifstream archivo;
@@ -55,27 +52,24 @@ PlayState::PlayState(Game* game, int qwert) :GameState(game)
 			Cols = map->getCOls();
 
 			pac = new PacMan(0, 0, gueim->getRender(), gueim, this);
+			objetos.push_back(pac);
 			if (!pac->loadFromFile(archivo))
 				throw FileFormatError("Error while reading the data from the pacman");
 			for (int i = 0; i < 4; i++) {
-				ghosts[i] = new Ghost(0, 0, gueim->getRender(), gueim, this);
+
+				ghosts.push_back(new Ghost(0, 0, gueim->getRender(), gueim, this, pac, i));
+				objetos.push_back(ghosts[i]);
 				if (!ghosts[i]->loadFromFile(archivo))
 					throw FileFormatError("Error while reading the data from common ghosts");
 			}
 			int numEnemies = 0;
 			archivo >> numEnemies;
 			for (int i = 0; i < numEnemies; i++) {
-				enemies.push_back(new SmartGhost(0, 0, gueim->getRender(), gueim, this));
+				enemies.push_back(new SmartGhost(0, 0, gueim->getRender(), gueim, this, pac));
+				objetos.push_back(enemies[i]);
 				if (!enemies[i]->loadFromFile(archivo))
 					throw FileFormatError("Error while reading the data from smartghosts");
 			}
-
-			/*int aux = 0;
-			archivo >> aux;
-			for (int i = 0; i < aux; i++) {
-				lista.push_back(new GameCharacter(0, 0, this));
-
-			}*/
 		}
 		archivo.close();
 	}
@@ -83,7 +77,6 @@ PlayState::PlayState(Game* game, int qwert) :GameState(game)
 		archivo.close();
 		cout << e.what() << '\n';
 		gueim->getMachine()->PopState();
-		//gueim->getMachine()->PushState(new PlayState(gueim));
 	}
 }
 
@@ -101,17 +94,8 @@ void PlayState::Update() {
 		pac->RestartContador(0);
 		map->SetCell(pac->getPosX(), pac->getPosY(), Vacio);
 	}
-	pac->Mueve(Fils, Cols);
 	Colision();
-	for (int i = 0; i < 4; i++)
-	{
-		ghosts[i]->Mueve(Fils, Cols);
-	}
-	for (int i = 0; i < enemies.size(); i++)
-	{
-		enemies[i]->Mueve(Fils, Cols);
-	}
-	Colision();
+	GameState::Update();
 	map->AnimVit();
 	pac->Contador();
 	FinJuego();
@@ -153,31 +137,9 @@ void PlayState::render() {
 				map->Renderizado(destRec, 2);
 			}
 			//analogo para la vitamina
-
-
-
-			for (int d = 0; d < 4; d++)
-			{
-				if ((ghosts[d]->getPosX() == j) && (ghosts[d]->getPosY() == i))
-				{
-					ghosts[d]->RenderGhost(destRec, d, pac);
-				}
-				//si no es ninguna de las anteriores, es una casilla vacia, de modo
-				//que comprobamos si es la posicion del fantasma 1 y si lo es lo pintamos
-			}
-			//Renderizado de fantasmas
-
-			if (pac->getPosX() == j && pac->getPosY() == i)
-			{
-				pac->RenderPac(destRec);
-			}
-			for (int a = 0; a < enemies.size(); a++)
-			{
-				if (enemies[a]->getPosX() == j && enemies[a]->getPosY() == i) enemies[a]->RenderGhost(destRec, pac);
-			}
-			//Renderizado de PacMan
 		}
 	}
+	GameState::render();
 	SDL_RenderPresent(gueim->getRender());
 	//pintamos la escena
 }
@@ -253,12 +215,6 @@ bool PlayState::SaveToFile() {
 	for (int i = 0; i < enemies.size(); i++) {
 		if (!enemies[i]->saveToFile(archivo))gueim->error = true;
 	}
-	/*
-	for (int i = 0; i < lista.size(); i++)
-	if (!lista[i]->saveToFile(archivo))error = true;
-	*/
-	//iterator* i = new iterator();
-	//quedan los fantasmas
 
 	archivo.close();
 	return archivo.fail();
@@ -340,14 +296,22 @@ void PlayState::CreaFantasma(int x, int y) {
 		else if (random == 1)x++;
 		else if (random == 2)y--;
 		else x--;
-		enemies.push_back(new SmartGhost(x, y, gueim->getRender(), gueim, this));		//cambiar de game a playstate en la constructora tambien
+		enemies.push_back(new SmartGhost(x, y, gueim->getRender(), gueim, this, pac));		//cambiar de game a playstate en la constructora tambien
 	}
 }
 
+struct fant
+{
+	int posX;
+	int posY;
+	int anim;
+};
 //Lee de archivo y crea un tablero con la información dada, igual que el antiguo de game
 bool PlayState::SetMap(string filename) {
 
 	int aux = 0;
+	int aux2 = 0;
+	vector<fant*> fantasma;
 	//variable auxiliar para leer de archivo y asignar los distintos tipos de casillas
 
 	ifstream archivo;
@@ -364,32 +328,44 @@ bool PlayState::SetMap(string filename) {
 
 				archivo >> aux;
 				//leemos el siguiente numero del archivo
-
-
-				if (aux < 4)
+				if (aux == 9)
+				{
+					map->SetCell(i, j, Vacio);
+					pac = new PacMan(i, j, gueim->getRender(), gueim, this);
+					objetos.push_back(pac);
+				}
+				else if (aux < 4)
 				{
 					map->SetCell(i, j, (MapCells)aux);
 					if (aux == 2) maxPunt++;
 				}
 				else if (aux <9) {
+					aux2++;
 					map->SetCell(i, j, Vacio);
-					ghosts[aux - 5] = new Ghost(i, j, gueim->getRender(), gueim, this);
+					fant* fantas = new fant();
+					fantas->posX = i;
+					fantas->posY = j;
+					fantas->anim = aux2;
+					fantasma.push_back(fantas);
 				}
-				else
-				{
-					map->SetCell(i, j, Vacio);
-					pac = new PacMan(i, j, gueim->getRender(), gueim, this);
-				}
-
 			}
 		}
 		MaxComida = maxPunt;
 	}
+	for (int i = 0; i < fantasma.size(); i++)
+	{
+		ghosts.push_back(new Ghost(fantasma[i]->posX, fantasma[i]->posY, gueim->getRender(), gueim, this, pac, fantasma[i]->anim));
+		objetos.push_back(ghosts[i]);
+	}
 	int auxi = enemies.size();
 	for (int i = 0; i < auxi; i++)
 		enemies.pop_back();
-	enemies.push_back(new SmartGhost(1, 1, gueim->getRender(), gueim,this));
-	enemies.push_back(new SmartGhost(1, 3, gueim->getRender(), gueim, this));
+	enemies.push_back(new SmartGhost(1, 1, gueim->getRender(), gueim,this, pac));
+	enemies.push_back(new SmartGhost(1, 3, gueim->getRender(), gueim, this, pac));
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		objetos.push_back(enemies[i]);
+	}
 	archivo.close();
 	pac->RestartContador(50);
 	return !archivo.fail();

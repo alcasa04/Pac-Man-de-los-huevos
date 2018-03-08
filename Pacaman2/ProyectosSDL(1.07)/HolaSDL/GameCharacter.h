@@ -8,6 +8,8 @@ class GameCharacter : public PacManObject
 public:
 	GameCharacter(int x, int y, Game* game);
 	~GameCharacter();
+	virtual void Render();
+	virtual void Mueve(int fils, int cols);
 protected:
 	
 	int IniX, IniY;
@@ -22,7 +24,6 @@ protected:
 	SDL_Renderer* render = nullptr;
 
 	virtual bool loadFromFile(ifstream& archivo);
-	virtual void Render();
 	virtual void update();
 	virtual bool saveToFile(ofstream& archivo);
 };
