@@ -14,13 +14,13 @@ MenuState::MenuState(Game* game):GameState(game)
 	auxRect.h = 50;
 
 	auxRect.y = winHeight / 2 - 100;
-	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, GoToPlay, "..\\images\\start.png"));
+	objetos.push_back(new Button(auxRect, new Texture(), gueim, GoToPlay, "..\\images\\start.png"));
 
 	auxRect.y += 100;
-	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, LoadGame, "..\\images\\load.png"));
+	objetos.push_back(new Button(auxRect, new Texture(), gueim, LoadGame, "..\\images\\load.png"));
 
 	auxRect.y += 100;
-	MenuButtons.push_back(new Button(auxRect, new Texture(), gueim, Exit, "..\\images\\exit.png"));
+	objetos.push_back(new Button(auxRect, new Texture(), gueim, Exit, "..\\images\\exit.png"));
 
 	text = new Texture();
 	if (!text->loadText("..\\images\\Pac-Titulo.png", 1, 2, gueim->getRender()))gueim->error = true;
@@ -30,11 +30,11 @@ MenuState::MenuState(Game* game):GameState(game)
 	destRec.h = winHeight;
 }
 
-
 MenuState::~MenuState()
 {
-	for (int i = 0; i < MenuButtons.size(); i++)
+	/*for (int i = 0; i < MenuButtons.size(); i++)
 		delete MenuButtons[i];
+		*/
 }
 
 void MenuState::GoToPlay(Game* game) {
@@ -43,7 +43,10 @@ void MenuState::GoToPlay(Game* game) {
 }
 
 void MenuState::Exit(Game* game) {
-	game->getMachine()->PopState();
+	for (int i = 0; i < game->getMachine()->getNumber(); i++)
+	{
+		game->getMachine()->PopState();
+	}
 }
 
 void MenuState::LoadGame(Game* game) {
@@ -52,17 +55,11 @@ void MenuState::LoadGame(Game* game) {
 }
 
 void MenuState::render() {
-	SDL_RenderClear(gueim->getRender());
-	//text->Render(1, 1, destRec, gueim->getRender());
-	text->RenderFrame(0,0,destRec, gueim->getRender());
-	for (int i = 0; i < MenuButtons.size(); i++)
-		MenuButtons[i]->Render();
-	SDL_RenderPresent(gueim->getRender());
+	GameState::render();
 }
 
-void MenuState::Update(){}
+void MenuState::Update(){ GameState::update(); }
 
 void MenuState::HandleEvent(SDL_Event& e) {
-	for (int i = 0; i < MenuButtons.size(); i++)
-		MenuButtons[i]->HandleEvent(e);
+	GameState::HandleEvent(e);
 }

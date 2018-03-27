@@ -4,7 +4,7 @@
 #include"Game.h"
 
 
-GameMap::GameMap(int fils, int cols, SDL_Renderer* rend, PlayState*plai)
+GameMap::GameMap(int fils, int cols, SDL_Renderer* rend, PlayState*plai) : PacManObject()
 //constructora, le pasamos como parametros filas y columnas del mapa
 {
 	play = plai;
@@ -99,7 +99,41 @@ bool GameMap::loadFromFile(ifstream& archivo) {
 	return !archivo.fail();
 };
 
-void GameMap::Render() {};
+void GameMap::Render() {
+
+	destRec.w = destRec.h = 20;
+	//altura de la pantalla 600, numero de filas ~= 30, 600/30 = 20
+
+	for (int j = 0; j < Fils; j++)
+	{
+
+		destRec.y = j * 20 + ((winHeight - 20 * Cols) / 2);
+		//vamos situando donde vamos a pintar (en este caso la fila)
+
+		for (int i = 0; i < Cols; i++)
+		{
+			//recorrido de la matriz entera
+
+			destRec.x = (i * 20) + ((winWidth - 20 * Cols) / 2);
+			//asignamos en que columna se va a pintar
+
+			if (tablero[j][i] == Muro) {
+				Renderizado(destRec, 0);
+			}
+			//si es un muro, renderizamos la imagen del muro
+
+			else if (tablero[j][i] == Comida) {
+				Renderizado(destRec, 1);
+			}
+			//analogo para la comida
+
+			else if (tablero[j][i] == Vitamina) {
+				 Renderizado(destRec, 2);
+			}
+			//analogo para la vitamina
+		}
+	}
+};
 
 void GameMap::update() {};
 

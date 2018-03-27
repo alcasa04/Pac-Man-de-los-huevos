@@ -24,5 +24,6 @@ public:
 	bool empty() {
 		return gameStack.empty();
 	};
+	int getNumber() { return gameStack.size(); };
 };
 

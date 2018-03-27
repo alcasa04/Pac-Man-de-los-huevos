@@ -10,6 +10,7 @@ public:
 	~GameCharacter();
 	virtual void Render();
 	virtual void Mueve(int fils, int cols);
+	virtual void update();
 protected:
 	
 	int IniX, IniY;
@@ -24,7 +25,7 @@ protected:
 	SDL_Renderer* render = nullptr;
 
 	virtual bool loadFromFile(ifstream& archivo);
-	virtual void update();
+
 	virtual bool saveToFile(ofstream& archivo);
 };
 

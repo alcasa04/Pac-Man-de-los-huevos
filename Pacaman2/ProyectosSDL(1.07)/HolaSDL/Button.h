@@ -12,9 +12,10 @@ protected:
 public:
 	Button(SDL_Rect rect, Texture* text, Game* game, CallBackOnClick* cboclk, string filename);
 	~Button();
-	bool HandleEvent(SDL_Event& e);
-		void update();
-	void Render();
+	virtual bool HandleEvent(SDL_Event& e);
+    virtual void update();
+	virtual void Render();
+	virtual void Mueve() {};
 		//bool loadFromFile(string filename);
 		//bool saveToFile(string filename);
 };

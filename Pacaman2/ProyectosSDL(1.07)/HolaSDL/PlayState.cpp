@@ -1,11 +1,9 @@
 #include "PlayState.h"
 #include"GameMap.h"
 #include"GameStateMachine.h"
-
 #include"PauseState.h"
 #include"EndState.h"
 #include"MenuState.h"
-
 #include"FileFormatError.h"
 
 //constructora y destructora
@@ -27,7 +25,7 @@ PlayState::~PlayState()
 
 PlayState::PlayState(Game* game, int qwert) :GameState(game)
 {
-
+	rend = game->getRender();
 		string entrada, code;
 		ifstream archivo;
 	try{
@@ -82,66 +80,16 @@ PlayState::PlayState(Game* game, int qwert) :GameState(game)
 
 //metodos virtuales heredados
 void PlayState::Update() {
-	if (map->getTablero()[pac->getPosX()][pac->getPosY()] == Comida)
-	{
-		map->SetCell(pac->getPosX(), pac->getPosY(), Vacio);
-		puntos++;
-		ActComida++;
-	}
-	else if (map->getTablero()[pac->getPosX()][pac->getPosY()] == Vitamina)
-	{
-		pac->Come = true;
-		pac->RestartContador(0);
-		map->SetCell(pac->getPosX(), pac->getPosY(), Vacio);
-	}
-	Colision();
-	GameState::Update();
+
+	GameState::update();
 	map->AnimVit();
-	pac->Contador();
 	FinJuego();
 	GUI();
-
 }
 
 void PlayState::render() {
-	SDL_RenderClear(gueim->getRender());
-	//const porque lo ponia en los slides 
 
-	destRec.w = destRec.h = 20;
-	//altura de la pantalla 600, numero de filas ~= 30, 600/30 = 20
-
-	for (int j = 0; j < Fils; j++)
-	{
-
-		destRec.y = j * 20 + ((winHeight - 20 * Cols) / 2);
-		//vamos situando donde vamos a pintar (en este caso la fila)
-
-		for (int i = 0; i < Cols; i++)
-		{
-			//recorrido de la matriz entera
-
-			destRec.x = (i * 20) + ((winWidth - 20 * Cols) / 2);
-			//asignamos en que columna se va a pintar
-
-			if (map->getTablero()[j][i] == Muro) {
-				map->Renderizado(destRec, 0);
-			}
-			//si es un muro, renderizamos la imagen del muro
-
-			else if (map->getTablero()[j][i] == Comida) {
-				map->Renderizado(destRec, 1);
-			}
-			//analogo para la comida
-
-			else if (map->getTablero()[j][i] == Vitamina) {
-				map->Renderizado(destRec, 2);
-			}
-			//analogo para la vitamina
-		}
-	}
 	GameState::render();
-	SDL_RenderPresent(gueim->getRender());
-	//pintamos la escena
 }
 
 void PlayState::HandleEvent(SDL_Event& e) {
@@ -235,10 +183,11 @@ void PlayState::FinJuego() {
 }
 
 void PlayState::Colision() {
+
 	//colision con fantasmas normales
 	for (int i = 0; i < 4; i++) 
 	{
-		if (pac->getPosX() == ghosts[i]->getPosX() && pac->getPosY() == ghosts[i]->getPosY())
+		if (pac->getPosX() == ghosts[i]->getPosX() && pac->getPosY() == ghosts[i]->getPosY() && !collision)
 		{
 			if (pac->Come) 
 			{
@@ -247,20 +196,22 @@ void PlayState::Colision() {
 			}
 			else 
 			{
-				gueim->newState(new EndState(gueim));											//provisional, hay que pasarle new EndState o algo
+				gueim->newState(new EndState(gueim));
+				collision = true;
 			}
 		}
 	}
 	//colision con fantasmas inteligentes
 	for (int i = 0; i < enemies.size(); i++) 
 	{
-		if (pac->getPosX() == enemies[i]->getPosX() && pac->getPosY() == enemies[i]->getPosY()) 
+		if (pac->getPosX() == enemies[i]->getPosX() && pac->getPosY() == enemies[i]->getPosY() && !collision) 
 		{
 			if (pac->Come) {
 				enemies[i]->SetInicio();
 				puntos += 15;
 			}
 			else {
+				collision = true;
 				gueim->newState(new EndState(gueim));											//provisional, hay que pasarle new EndState o algo
 			}
 		}
@@ -276,6 +227,19 @@ void PlayState::Colision() {
 			}
 		}
 	}
+	if (map->getTablero()[pac->getPosX()][pac->getPosY()] == Comida)
+	{
+		map->SetCell(pac->getPosX(), pac->getPosY(), Vacio);
+		puntos++;
+		ActComida++;
+	}
+	else if (map->getTablero()[pac->getPosX()][pac->getPosY()] == Vitamina)
+	{
+		pac->Come = true;
+		pac->RestartContador(0);
+		map->SetCell(pac->getPosX(), pac->getPosY(), Vacio);
+	}
+
 }
 
 void PlayState::CreaFantasma(int x, int y) {
@@ -321,7 +285,7 @@ bool PlayState::SetMap(string filename) {
 	if (!archivo.fail()) {
 		archivo >> Fils >> Cols;
 		map = new GameMap(Fils, Cols, gueim->getRender(), this);
-
+		objetos.push_back(map);
 		for (int i = 0; i < Fils; i++) {
 			for (int j = 0; j < Cols; j++) {
 				//recorremos la matriz entera

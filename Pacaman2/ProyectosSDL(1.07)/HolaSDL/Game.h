@@ -29,17 +29,6 @@ private:
 	//variable render de la SDL
 	SDL_Renderer* render;
 
-	//puntero a mapa del juego
-	//GameMap* map = nullptr;
-	
-	//puntero a pacman
-	//PacMan* pacman = nullptr;
-
-	//list<GameCharacter*> lista;
-
-	//array de punteros a fantasmas
-	//Ghost* ghosts[4];
-
 	//si el juego esta pausado o no
 	bool pausa = false;
 
@@ -115,12 +104,6 @@ public:
 	//void finJuego();
 	void Menu();
 	void MenuEvents();
-	//int PacManX();
-	//int PacManY();
-
-	//bool SaveToFile();
-	//bool LoadFromFile();
-
 	int getFils();
 	int getCols();
 	void creaFantasma(int posX, int posY);

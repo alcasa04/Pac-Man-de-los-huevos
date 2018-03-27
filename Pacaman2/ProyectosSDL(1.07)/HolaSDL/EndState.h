@@ -9,6 +9,7 @@ public:
 	EndState(Game* game);
 	~EndState();
 	virtual void Update();
+	virtual void Mueve() {};
 	virtual void HandleEvent(SDL_Event& e);
 	virtual void render();
 	static void GoToMenu(Game*game);

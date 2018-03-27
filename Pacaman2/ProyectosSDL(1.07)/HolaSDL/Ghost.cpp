@@ -130,7 +130,7 @@ void Ghost::Render() {
 }
 
 void Ghost::update() {
-
+	Mueve(play->getFils(), play->getCols());
 }
 
 bool Ghost::loadFromFile(ifstream& archivo) {

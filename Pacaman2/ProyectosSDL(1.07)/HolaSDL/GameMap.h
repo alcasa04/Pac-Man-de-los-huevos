@@ -30,6 +30,9 @@ class GameMap : public PacManObject
 private:
 	//Game* game = nullptr;
 
+	int winWidth = 800,
+		winHeight = 600;
+
 	int Fils, Cols;
 	//tamaño del tablero
 
@@ -65,6 +68,8 @@ public:
 	virtual bool loadFromFile(ifstream& archivp);
 	virtual void Render();
 	virtual void update();
+	virtual void Mueve() {};
+	virtual bool HandleEvent(SDL_Event& evento) { return false; };
 	virtual bool saveToFile(ofstream& archivo);
 
 	MapCells** getTablero() { return tablero; };

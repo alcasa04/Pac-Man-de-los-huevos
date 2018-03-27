@@ -80,6 +80,8 @@ void PacMan::CambiaEstado(int i)
 
 void PacMan::Mueve(int fils, int cols) 
 {
+	play->Colision();
+
 	if (dir2 >= 0) {
 		if (play->NextCell(PosX, PosY, dir2)) {
 			//int nx = PosX, ny = PosY;
@@ -150,7 +152,6 @@ void PacMan::Mueve(int fils, int cols)
 			else if (PosY < 0)
 				PosY = cols;
 		}
-		//cout << PosX << " " << PosY << endl;
 	}
 
 	play->Colision();
@@ -222,9 +223,11 @@ void PacMan::RenderPac()
 		f++;
 	}
 }
-//Pinta a Pac-Man y a sus respectivas animaciones
 
-void PacMan::Update() {  }
+void PacMan::update() { 
+	Mueve(play->getFils(), play->getCols());
+	Contador(); 
+}
 void PacMan::Render() {
 	RenderPac();
 }

@@ -10,28 +10,28 @@ EndState::EndState(Game* game):GameState(game)
 	auxRect.y = winHeight / 2 - 25;
 	auxRect.w = 100;
 	auxRect.h = 50;
-	EndButton = new Button(auxRect, new Texture(), gueim, GoToMenu, "..\\images\\rojo.png");
+	objetos.push_back(new Button(auxRect, new Texture(), gueim, GoToMenu, "..\\images\\exit.png"));
 }
-
 
 EndState::~EndState()
 {
 }
 
 void EndState::render() {
-	EndButton->Render();
-	SDL_RenderPresent(gueim->getRender());
+	GameState::render();
 }
 
 void EndState::Update() {
-
+	GameState::update();
 }
 
 void EndState::HandleEvent(SDL_Event& e) {
-	EndButton->HandleEvent(e);
+	GameState::HandleEvent(e);
 }
 
 void EndState::GoToMenu(Game* game) {
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < game->getMachine()->getNumber(); i++)
+	{
 		game->getMachine()->PopState();
+	}
 }

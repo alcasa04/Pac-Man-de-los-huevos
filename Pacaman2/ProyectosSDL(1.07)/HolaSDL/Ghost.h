@@ -51,8 +51,9 @@ public:
 	void CambiaDir();
 	void SetInicio();
 	
-	void Render();
-	void update();
+	virtual void Render();
+	virtual void update();
+	virtual bool HandleEvent(SDL_Event& evento) { return false; };
 	bool loadFromFile(ifstream& archivo);
 	bool saveToFile(ofstream& archivo);
 };

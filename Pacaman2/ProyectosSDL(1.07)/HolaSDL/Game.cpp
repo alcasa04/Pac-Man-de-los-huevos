@@ -46,6 +46,7 @@ Game::Game()
 	{
 		cout << e.what() << '\n';
 	}
+	newState(new MenuState(this));
 }
 
 //Carga la imagen del Menú
@@ -57,7 +58,7 @@ void Game::LoadTextures() {
 //Hace que el Pac-Man se coma la comida y las vitaminas
 void Game::Update()
 {
-	stateMachine->CurrentState()->Update();
+	stateMachine->CurrentState()->update();
 }
 
 Game::~Game()
@@ -68,7 +69,7 @@ Game::~Game()
 
 //Comprueba pulsaciones de teclado y actua conforme a ello
 void Game::handleEvents() {
-	while (SDL_PollEvent(&evento))
+	while (SDL_PollEvent(&evento) && !stateMachine->empty())
 	{
 		if (evento.type == SDL_QUIT)
 		{
@@ -83,21 +84,14 @@ void Game::handleEvents() {
 //Realiza los bucles principales del juego (Menu y juego), realizando sus correspondientes llamadas
 void Game::run()
 {
-	stateMachine->PushState(new MenuState(this));
 	while (!exit && !stateMachine->empty()) {
-		SDL_Delay(50);
+		SDL_Delay(100);
+		SDL_RenderClear(render);
 		Update();
 		stateMachine->CurrentState()->render();
 		handleEvents();
+		SDL_RenderPresent(render);
 	}
-	if (exit)
-		cout << "Perdiste!" << endl;
-	else
-	{
-		cout << "Ganaste!" << endl;
-
-	}
-	exit = true;
 }
 
 //Muestra en consola la puntuación del modo: *Puntuación Actual/Puntuación Máxima*

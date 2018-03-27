@@ -50,6 +50,7 @@ public:
 
 	virtual void Render();
 	virtual void update();
+	virtual bool HandleEvent(SDL_Event& evento) { return false; };
 	virtual bool loadFromFile(ifstream& archivo);
 	virtual bool saveToFile(ofstream& archivo);
 

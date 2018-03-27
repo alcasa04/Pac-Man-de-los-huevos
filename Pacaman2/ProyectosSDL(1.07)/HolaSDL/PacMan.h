@@ -68,7 +68,8 @@ public:
 	//metodos auxiliares
 
 	virtual void Render();
-	virtual void Update();
+	virtual void update();
+	virtual bool HandleEvent(SDL_Event& evento) { return false; };
 	virtual bool loadFromFile(ifstream& archivo);
 	virtual bool saveToFile(ofstream& archivo);
 };

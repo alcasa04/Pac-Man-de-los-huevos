@@ -182,9 +182,8 @@ void SmartGhost::Render() {
 
 void SmartGhost::update() 
 {
-	//Mueve(gueim->getFils, gueim->getCols);
+	Mueve(play->getFils(), play->getCols());
 	SumaEdad();
-	Render();
 }
 
 bool SmartGhost::loadFromFile(ifstream& archivo) {
